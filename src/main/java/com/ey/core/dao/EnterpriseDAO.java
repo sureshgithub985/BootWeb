@@ -10,4 +10,10 @@ public interface EnterpriseDAO {
 
 	public List<Enterprise> getAllEnterpriseDAO();
 
+	public Enterprise findByEntName(String name);
+
+	public Enterprise deleteByName(String name);
+
+	public Enterprise updateEnterpise(String name, Enterprise ent);
+
 }

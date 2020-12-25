@@ -23,8 +23,24 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
 	@Override
 	public List<Enterprise> getAllEnterprises() {
-		
+
 		return entDAO.getAllEnterpriseDAO();
+	}
+
+	@Override
+	public Enterprise getEnterpriseByName(String name) {
+		return entDAO.findByEntName(name);
+	}
+
+	@Override
+	public Enterprise deleteEnterpriseByName(String name) {
+		return entDAO.deleteByName(name);
+	}
+
+	@Override
+	public Enterprise updateEnterprise(String name, Enterprise ent) {
+		
+		return entDAO.updateEnterpise(name, ent);
 	}
 
 }
