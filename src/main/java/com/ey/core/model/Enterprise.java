@@ -8,10 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "ptt_enterprises_info")
-public class Enterprise  implements Serializable{
+public class Enterprise implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,9 +23,11 @@ public class Enterprise  implements Serializable{
 	@Column(name = "id")
 	private Integer id;
 
-	@Column(name = "name")
+	@Size(min = 3, max = 15)
+	@Column(name = "name", unique = true)
 	private String name;
 
+	@Range(min = 1, max = 999)
 	@Column(name = "ckr")
 	private Integer ckr;
 
