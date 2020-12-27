@@ -60,21 +60,6 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>sonar</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<!-- Optional URL to server. Default value is http://localhost:9000 -->
-				<sonar.host.url>
-					http://localhost:9000
-				</sonar.host.url>
-			</properties>
-		</profile>
-	</profiles>
-
 
 	<build>
 		<plugins>
@@ -82,14 +67,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.sonarsource.scanner.maven</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>3.2</version>
-			</plugin>
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
-				</plugin> <plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
-				<version>0.8.7-SNAPSHOT</version> </plugin> -->
 		</plugins>
 	</build>
 
