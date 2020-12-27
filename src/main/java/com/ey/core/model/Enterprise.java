@@ -12,6 +12,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "ptt_enterprises_info")
 public class Enterprise implements Serializable {
@@ -46,70 +49,41 @@ public class Enterprise implements Serializable {
 	@Column(name = "zip_code")
 	private String zipCode;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Integer getCkr() {
-		return ckr;
-	}
-
-	public void setCkr(Integer ckr) {
-		this.ckr = ckr;
-	}
-
-	public String getCkrList() {
-		return ckrList;
-	}
-
-	public void setCkrList(String ckrList) {
-		this.ckrList = ckrList;
-	}
-
-	public String getCompany() {
-		return company;
-	}
-
-	public void setCompany(String company) {
-		this.company = company;
-	}
-
-	public String getAddressLine1() {
-		return addressLine1;
-	}
-
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
-	}
-
-	public String getAddressLine2() {
-		return addressLine2;
-	}
-
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
-	}
-
-	public String getZipCode() {
-		return zipCode;
-	}
-
-	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
-	}
-
+	/*
+	 * public Integer getId() { return id; }
+	 * 
+	 * public void setId(Integer id) { this.id = id; }
+	 * 
+	 * public String getName() { return name; }
+	 * 
+	 * public void setName(String name) { this.name = name; }
+	 * 
+	 * public Integer getCkr() { return ckr; }
+	 * 
+	 * public void setCkr(Integer ckr) { this.ckr = ckr; }
+	 * 
+	 * public String getCkrList() { return ckrList; }
+	 * 
+	 * public void setCkrList(String ckrList) { this.ckrList = ckrList; }
+	 * 
+	 * public String getCompany() { return company; }
+	 * 
+	 * public void setCompany(String company) { this.company = company; }
+	 * 
+	 * public String getAddressLine1() { return addressLine1; }
+	 * 
+	 * public void setAddressLine1(String addressLine1) { this.addressLine1 =
+	 * addressLine1; }
+	 * 
+	 * public String getAddressLine2() { return addressLine2; }
+	 * 
+	 * public void setAddressLine2(String addressLine2) { this.addressLine2 =
+	 * addressLine2; }
+	 * 
+	 * public String getZipCode() { return zipCode; }
+	 * 
+	 * public void setZipCode(String zipCode) { this.zipCode = zipCode; }
+	 */
 	@Override
 	public String toString() {
 		return "Enterprise [id=" + id + ", name=" + name + ", ckr=" + ckr + ", ckrList=" + ckrList + ", company="

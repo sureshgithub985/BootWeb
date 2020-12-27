@@ -20,24 +20,27 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.ey.core.model.Enterprise;
 import com.ey.core.service.EnterpriseService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RequestMapping("/wave-prov/wave")
 @Controller
+@Slf4j
 public class EnterpriseController {
 
 	@Autowired
 	private EnterpriseService entServie;
 
 	@PostMapping("/enterprises")
-	public ResponseEntity<Void> createEnterprise(@RequestBody Enterprise ent, UriComponentsBuilder uriBuilder)
-			 {
-		System.out.println("we are in the CreateEnterprise Controller...." + ent);
-		
-		if(ent != null)
+	public ResponseEntity<Void> createEnterprise(@RequestBody Enterprise ent, UriComponentsBuilder uriBuilder) {
+		log.debug("we are in the CreateEnterprise Controller...." + ent);
+
+		if (ent != null)
 			entServie.addEnterprise(ent);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setLocation(uriBuilder.path("/wave-prov/wave/enterprises/{name}").buildAndExpand(ent.getName()).toUri());
+		headers.setLocation(
+				uriBuilder.path("/wave-prov/wave/enterprises/{name}").buildAndExpand(ent.getName()).toUri());
 
 		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 
@@ -50,7 +53,6 @@ public class EnterpriseController {
 		return ResponseEntity.ok(null);
 	}
 
-	
 	@GetMapping("/enterprises")
 	public ResponseEntity<List<Enterprise>> getAllEnterprises() {
 
@@ -62,7 +64,7 @@ public class EnterpriseController {
 	@GetMapping("/enterprises/{name}")
 	public ResponseEntity<Enterprise> findByEnterpriseName(@PathVariable("name") String name) {
 
-		System.out.println("Name value is " + name);
+		log.debug("Name value is " + name);
 		Enterprise ent = entServie.getEnterpriseByName(name);
 		return ResponseEntity.ok(ent);
 
@@ -71,7 +73,7 @@ public class EnterpriseController {
 	@DeleteMapping("/enterprises/{name}")
 	public ResponseEntity<Enterprise> deleteByEnterpriseName(@PathVariable("name") String name) {
 
-		System.out.println("Name value is " + name);
+		log.debug("Name value is " + name);
 		Enterprise ent = entServie.deleteEnterpriseByName(name);
 		return ResponseEntity.ok(ent);
 
