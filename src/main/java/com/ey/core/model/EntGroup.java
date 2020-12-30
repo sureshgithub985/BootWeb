@@ -1,13 +1,12 @@
 package com.ey.core.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
@@ -16,17 +15,16 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "ptt_enterprises_info")
-public class Enterprise implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+@Table(name = "shared_chat_group_info")
+public class EntGroup {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
 
-	@Size(min = 3, max = 15)
+	@NotNull
+	@Size(min = 3, max = 24)
 	@Column(name = "name", unique = true)
 	private String name;
 
@@ -34,19 +32,15 @@ public class Enterprise implements Serializable {
 	@Column(name = "ckr")
 	private Integer ckr;
 
-	@Column(name = "ckr_list")
-	private String ckrList;
+	@NotNull
+	@Column(name = "enterprise_name")
+	private String enterpriseName;
 
-	@Column(name = "company")
-	private String company;
+	@Column(name = "sgid")
+	private String sgid;
 
-	@Column(name = "address_line1")
-	private String addressLine1;
+	@Range(min = 0, max = 1)
+	@Column(name = "group_type")
+	private Integer groupType;
 
-	@Column(name = "address_line2")
-	private String addressLine2;
-
-	@Column(name = "zip_code")
-	private String zipCode;
-	
 }

@@ -50,14 +50,20 @@ public class EnterpriseController {
 	public ResponseEntity<Void> updateEnterprise(@RequestBody Enterprise ent, @PathVariable("name") String name) {
 
 		entServie.updateEnterprise(name, ent);
-		return ResponseEntity.ok(null);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return new ResponseEntity<>(headers, HttpStatus.OK);
 	}
 
 	@GetMapping("/enterprises")
 	public ResponseEntity<List<Enterprise>> getAllEnterprises() {
 
 		List<Enterprise> entList = entServie.getAllEnterprises();
-		return ResponseEntity.ok(entList);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return new ResponseEntity<>(entList, headers, HttpStatus.OK);
 
 	}
 
@@ -66,7 +72,11 @@ public class EnterpriseController {
 
 		log.debug("Name value is " + name);
 		Enterprise ent = entServie.getEnterpriseByName(name);
-		return ResponseEntity.ok(ent);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return new ResponseEntity<>(ent, headers, HttpStatus.OK);
 
 	}
 
@@ -74,8 +84,12 @@ public class EnterpriseController {
 	public ResponseEntity<Enterprise> deleteByEnterpriseName(@PathVariable("name") String name) {
 
 		log.debug("Name value is " + name);
-		Enterprise ent = entServie.deleteEnterpriseByName(name);
-		return ResponseEntity.ok(ent);
+		entServie.deleteEnterpriseByName(name);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return new ResponseEntity<>(headers, HttpStatus.OK);
 
 	}
 
