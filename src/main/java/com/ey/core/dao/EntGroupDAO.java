@@ -11,7 +11,7 @@ public interface EntGroupDAO {
 
 	public List<EntGroup> getAllEntGroupDAO();
 
-	public EntGroup findByEntGroupByName(String name);
+	public EntGroup findByByName(String name);
 
 	public EntGroup deleteByName(String name);
 

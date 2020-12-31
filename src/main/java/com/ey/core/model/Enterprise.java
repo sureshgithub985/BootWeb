@@ -8,9 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Range;
 
 import lombok.Data;
 
@@ -26,11 +25,11 @@ public class Enterprise implements Serializable {
 	@Column(name = "id")
 	private Integer id;
 
+	@NotNull
 	@Size(min = 3, max = 15)
 	@Column(name = "name", unique = true)
 	private String name;
 
-	@Range(min = 1, max = 999)
 	@Column(name = "ckr")
 	private Integer ckr;
 
@@ -48,5 +47,5 @@ public class Enterprise implements Serializable {
 
 	@Column(name = "zip_code")
 	private String zipCode;
-	
+
 }

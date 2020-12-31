@@ -10,10 +10,10 @@ public interface SubscriberDAO {
 
 	public List<Subscriber> getAllSubscribersDAO();
 
-	public Subscriber findBySubmdn(Long mdn);
+	public Subscriber getSubscriber(Long mdn);
 
-	public Subscriber deleteByMdn(Long mdn);
+	public Subscriber deleteSubscriber(Long mdn);
 
 	public Subscriber updateSubscriber(Long mdn, Subscriber sub);
-	
+
 }

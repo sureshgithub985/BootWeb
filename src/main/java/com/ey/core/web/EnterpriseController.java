@@ -32,7 +32,7 @@ public class EnterpriseController {
 
 	@PostMapping("/enterprises")
 	public ResponseEntity<Void> createEnterprise(@RequestBody Enterprise ent, UriComponentsBuilder uriBuilder) {
-		log.debug("we are in the CreateEnterprise Controller...." + ent);
+		log.debug(" Create Enterprise Controller ");
 
 		if (ent != null)
 			entServie.addEnterprise(ent);
@@ -49,6 +49,8 @@ public class EnterpriseController {
 	@PutMapping("/enterprises/{name}")
 	public ResponseEntity<Void> updateEnterprise(@RequestBody Enterprise ent, @PathVariable("name") String name) {
 
+		log.debug(" Update Enterprise Controller ");
+
 		entServie.updateEnterprise(name, ent);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -59,6 +61,7 @@ public class EnterpriseController {
 	@GetMapping("/enterprises")
 	public ResponseEntity<List<Enterprise>> getAllEnterprises() {
 
+		log.debug(" GETALL Enterprise Controller ");
 		List<Enterprise> entList = entServie.getAllEnterprises();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -70,7 +73,7 @@ public class EnterpriseController {
 	@GetMapping("/enterprises/{name}")
 	public ResponseEntity<Enterprise> findByEnterpriseName(@PathVariable("name") String name) {
 
-		log.debug("Name value is " + name);
+		log.debug(" GET Enterprise Controller ");
 		Enterprise ent = entServie.getEnterpriseByName(name);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -83,7 +86,8 @@ public class EnterpriseController {
 	@DeleteMapping("/enterprises/{name}")
 	public ResponseEntity<Enterprise> deleteByEnterpriseName(@PathVariable("name") String name) {
 
-		log.debug("Name value is " + name);
+		log.debug(" Delete Enterprise Controller ");
+
 		entServie.deleteEnterpriseByName(name);
 
 		HttpHeaders headers = new HttpHeaders();

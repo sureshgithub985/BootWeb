@@ -15,6 +15,6 @@ public interface EntGroupService {
 
 	public EntGroup deleteEntGroupByName(String name);
 
-	public EntGroup updateEnterprise(String name, EntGroup entGroup);
+	public EntGroup updateEntGroup(String name, EntGroup entGroup);
 
 }

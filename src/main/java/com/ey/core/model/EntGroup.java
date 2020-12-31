@@ -1,5 +1,7 @@
 package com.ey.core.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +18,9 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "shared_chat_group_info")
-public class EntGroup {
+public class EntGroup implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +32,6 @@ public class EntGroup {
 	@Column(name = "name", unique = true)
 	private String name;
 
-	@Range(min = 1, max = 999)
 	@Column(name = "ckr")
 	private Integer ckr;
 
