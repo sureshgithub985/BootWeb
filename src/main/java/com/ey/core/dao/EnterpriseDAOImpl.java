@@ -122,13 +122,13 @@ public class EnterpriseDAOImpl implements EnterpriseDAO {
 		Integer ckr = ent.getCkr();
 
 		if (ckrList != null && ckr != null) {
-			if (ent1.getCkrList() != "" && ent1.getCkr() != 0)
+			if (!ent1.getCkrList().equals("") && ent1.getCkr() != 0)
 				ckrList = ent1.getCkrList().concat(",").concat(ckrList);
 
 			// ValidateCkr and CkrList
 			validateCkrAndCkrList(ckr, ckrList);
 		} else if (ckrList == null && ckr == null) {
-			if (ent1.getCkrList() != "" && ent1.getCkr() != 0) {
+			if (!ent1.getCkrList().equals("") && ent1.getCkr() != 0) {
 				ckrList = ent1.getCkrList();
 				ckr = ent1.getCkr();
 			} else {

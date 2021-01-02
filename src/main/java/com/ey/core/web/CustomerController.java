@@ -31,15 +31,19 @@ public class CustomerController {
 	public ResponseEntity<Void> createCustomer(@RequestBody Customer cust, UriComponentsBuilder uriBuilder) {
 		log.debug("we are in the CreateEnterprise Controller...." + cust);
 
-		if (cust != null)
-			custService.addCustomer(cust);
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setLocation(uriBuilder.path("/wave-prov/wave/customers/{name}")
-				.buildAndExpand(cust.getFirstName() + cust.getLastName()).toUri());
 
-		return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		if (cust != null) {
+			custService.addCustomer(cust);
+
+			headers.setLocation(uriBuilder.path("/wave-prov/wave/customers/{name}")
+					.buildAndExpand(cust.getFirstName() + cust.getLastName()).toUri());
+
+			return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 

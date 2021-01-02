@@ -34,14 +34,19 @@ public class EntGroupController {
 	public ResponseEntity<Void> createEntGroup(@RequestBody EntGroup egroup, UriComponentsBuilder uriBuilder) {
 		log.debug(" Create EnterpriseGroup Controller ");
 
-		if (egroup != null)
-			entGroupService.addEntGroup(egroup);
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setLocation(uriBuilder.path("/wave-prov/wave/egroups/{name}").buildAndExpand(egroup.getName()).toUri());
 
-		return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		if (egroup != null) {
+			entGroupService.addEntGroup(egroup);
+
+			headers.setLocation(
+					uriBuilder.path("/wave-prov/wave/egroups/{name}").buildAndExpand(egroup.getName()).toUri());
+
+			return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 

@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/wave-prov/wave")
 @Controller
-public class SubsriberController {
+public class SubscriberController {
 
 	@Autowired
 	private SubscriberService subServie;
@@ -34,14 +34,19 @@ public class SubsriberController {
 	public ResponseEntity<Void> createSubscriber(@RequestBody Subscriber sub, UriComponentsBuilder uriBuilder) {
 		log.debug("Create Subscriber Controller ");
 
-		if (sub != null)
-			subServie.addSubscriber(sub);
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setLocation(uriBuilder.path("/wave-prov/wave/subscribers/{mdn}").buildAndExpand(sub.getMdn()).toUri());
 
-		return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		if (sub != null) {
+			subServie.addSubscriber(sub);
+
+			headers.setLocation(
+					uriBuilder.path("/wave-prov/wave/subscribers/{mdn}").buildAndExpand(sub.getMdn()).toUri());
+
+			return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@GetMapping("/subscribers")
