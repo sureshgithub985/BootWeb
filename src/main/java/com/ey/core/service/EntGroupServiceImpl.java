@@ -29,7 +29,7 @@ public class EntGroupServiceImpl implements EntGroupService {
 	@Override
 	public List<EntGroup> getAllEntGroups() {
 
-		log.debug(" GETALL Enterprise Group Service ");
+		log.debug(" GETALL Enterprise Group Service.. ");
 
 		return entGroupDao.getAllEntGroupDAO();
 	}
