@@ -1,6 +1,7 @@
 package com.ey.core.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,13 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import lombok.Data;
 
@@ -52,7 +54,11 @@ public class Customer implements Serializable {
 	@Column(name = "phone")
 	private Long phone;
 
-	@JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "subscriber", fetch = FetchType.EAGER)
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updated_at", nullable = false)
+	@LastModifiedDate
+	private Date updatedAt;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Address> address;
 }

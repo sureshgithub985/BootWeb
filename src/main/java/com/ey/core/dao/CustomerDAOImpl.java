@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.ey.core.model.Address;
 import com.ey.core.model.Customer;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,11 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public void createCustomer(Customer cust) {
 		log.debug(" Create Customer DAO ");
 
+		List<Address> addList = cust.getAddress();
+		for (Address add : addList) {
+			add.setCustomer(cust);
+		}
+
 		custRepository.save(cust);
 	}
 
@@ -38,8 +44,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public Customer findByCustomerName(String name) {
 
 		log.debug(" GET Customer DAO ");
-		return null;
-		// custRepository.findByName(name);
+		return custRepository.findByfirstName(name);
 	}
 
 	@Override

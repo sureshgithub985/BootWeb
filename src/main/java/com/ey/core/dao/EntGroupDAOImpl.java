@@ -31,7 +31,7 @@ public class EntGroupDAOImpl implements EntGroupDAO {
 
 		log.debug(" Create Enterprise Group ");
 
-		ValidateEnterpriseAndckrcheck(egroup);
+		validateEnterpriseAndckrcheck(egroup);
 		if (egroup.getCkr() == null)
 			egroup.setCkr(0);
 
@@ -44,8 +44,8 @@ public class EntGroupDAOImpl implements EntGroupDAO {
 			throw new ValidationErrorException(MessageUtil.NAME_ALREADY_EXISTS);
 	}
 
-	private void ValidateEnterpriseAndckrcheck(EntGroup egroup) {
-		
+	private void validateEnterpriseAndckrcheck(EntGroup egroup) {
+
 		Enterprise ent = entRepository.findByName(egroup.getEnterpriseName());
 		if (ent == null)
 			throw new ValidationErrorException(MessageUtil.ENTERPRISE_NAME_DOESNOT_EXISTS);

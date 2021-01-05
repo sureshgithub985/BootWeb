@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public Customer getCustomerByName(String name) {
 
-		return null;
+		return custDAO.findByCustomerName(name);
 	}
 
 	@Override

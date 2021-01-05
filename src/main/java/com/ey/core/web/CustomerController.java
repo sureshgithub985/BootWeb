@@ -1,5 +1,6 @@
 package com.ey.core.web;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.ey.core.model.Address;
 import com.ey.core.model.Customer;
 import com.ey.core.service.CustomerService;
 
@@ -29,21 +32,21 @@ public class CustomerController {
 
 	@PostMapping("/customers")
 	public ResponseEntity<Void> createCustomer(@RequestBody Customer cust, UriComponentsBuilder uriBuilder) {
-		log.debug("we are in the CreateEnterprise Controller...." + cust);
+
+		Date date = new Date();
+		cust.setUpdatedAt(date);
+
+		log.info("we are in the CreateEnterprise Controller...." + cust);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		if (cust != null) {
-			custService.addCustomer(cust);
+		custService.addCustomer(cust);
 
-			headers.setLocation(uriBuilder.path("/wave-prov/wave/customers/{name}")
-					.buildAndExpand(cust.getFirstName() + cust.getLastName()).toUri());
+		headers.setLocation(uriBuilder.path("/wave-prov/wave/customers/{name}")
+				.buildAndExpand(cust.getFirstName() + cust.getLastName()).toUri());
 
-			return new ResponseEntity<>(headers, HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 
 	}
 
@@ -51,10 +54,25 @@ public class CustomerController {
 	public ResponseEntity<List<Customer>> getAllCustomers() {
 
 		List<Customer> custList = custService.getAllCustomers();
+
+		System.out.println("custList value is " + custList);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		return new ResponseEntity<>(custList, headers, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/customers/{firstName}")
+	public ResponseEntity<Customer> getCustomer(@PathVariable("firstName") String firstName) {
+
+		Customer cust = custService.getCustomerByName(firstName);
+
+		System.out.println("custList value is " + cust);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return new ResponseEntity<>(cust, headers, HttpStatus.OK);
 
 	}
 

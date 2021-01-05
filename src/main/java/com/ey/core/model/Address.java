@@ -4,14 +4,13 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
 
@@ -39,9 +38,8 @@ public class Address implements Serializable {
 	@Column(name = "zip_code")
 	private String zipCode;
 
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "id", referencedColumnName = "id")
-	private Subscriber subscriber;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cust_id", referencedColumnName = "id")
+	private Customer customer;
 
 }

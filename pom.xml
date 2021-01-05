@@ -59,7 +59,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
@@ -81,7 +81,7 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-bean-validators</artifactId>
 			<version>3.0.0</version>
-		</dependency>
+		</dependency> -->
 
 
 

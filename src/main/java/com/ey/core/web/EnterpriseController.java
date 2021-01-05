@@ -34,15 +34,19 @@ public class EnterpriseController {
 	public ResponseEntity<Void> createEnterprise(@RequestBody Enterprise ent, UriComponentsBuilder uriBuilder) {
 		log.debug(" Create Enterprise Controller ");
 
-		if (ent != null)
-			entServie.addEnterprise(ent);
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setLocation(
-				uriBuilder.path("/wave-prov/wave/enterprises/{name}").buildAndExpand(ent.getName()).toUri());
 
-		return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		if (ent != null) {
+			entServie.addEnterprise(ent);
+
+			headers.setLocation(
+					uriBuilder.path("/wave-prov/wave/enterprises/{name}").buildAndExpand(ent.getName()).toUri());
+
+			return new ResponseEntity<>(headers, HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 
