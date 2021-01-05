@@ -2,6 +2,9 @@ package com.ey.core.util;
 
 public class MessageUtil {
 
+	private MessageUtil() {
+	}
+
 	public static final String CKR_NOT_IN_CKRLIST = "Ckr should be in the ckrList";
 	public static final String CKRLIST_INLVALD_SIZE = "ckrList size is Invalid";
 	public static final String DUPLICATE_CKR = "ckrList contain Duplicate values";

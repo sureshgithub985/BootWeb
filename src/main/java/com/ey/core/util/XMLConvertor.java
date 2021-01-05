@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 
 import com.ey.core.model.GTProfile;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class XMLConvertor {
 
@@ -24,7 +26,7 @@ public class XMLConvertor {
 		try {
 			context = JAXBContext.newInstance(metaCLASSES);
 		} catch (JAXBException e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 	}
 
@@ -39,7 +41,7 @@ public class XMLConvertor {
 			m.marshal(obj, sw);
 			outXml = sw.toString();
 		} catch (JAXBException e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 
 		return outXml;
@@ -53,7 +55,7 @@ public class XMLConvertor {
 			Unmarshaller um = context.createUnmarshaller();
 			obj = um.unmarshal(new StringReader(inXml));
 		} catch (JAXBException e) {
-			e.printStackTrace();
+			log.debug(e.getMessage());
 		}
 		return obj;
 	}
