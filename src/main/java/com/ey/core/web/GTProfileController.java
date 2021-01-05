@@ -1,16 +1,20 @@
 package com.ey.core.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.ey.core.model.Customer;
 import com.ey.core.model.GTProfile;
 import com.ey.core.service.GTProfileService;
 
@@ -41,6 +45,19 @@ public class GTProfileController {
 		} else {
 			return new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
+	}
+
+	@GetMapping("/gprofiles")
+	public ResponseEntity<List<GTProfile>> getAllGTProfiles() {
+
+		List<GTProfile> gprofileList = gtprofileService.getAllGprofiles();
+
+		System.out.println("gprofileList value is " + gprofileList);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return new ResponseEntity<>(gprofileList, headers, HttpStatus.OK);
 
 	}
 
