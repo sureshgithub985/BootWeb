@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ey.core.model.Address;
 import com.ey.core.model.Customer;
 import com.ey.core.service.CustomerService;
 
@@ -55,7 +54,6 @@ public class CustomerController {
 
 		List<Customer> custList = custService.getAllCustomers();
 
-		System.out.println("custList value is " + custList);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -68,7 +66,6 @@ public class CustomerController {
 
 		Customer cust = custService.getCustomerByName(firstName);
 
-		System.out.println("custList value is " + cust);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 

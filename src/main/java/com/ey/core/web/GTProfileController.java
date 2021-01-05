@@ -57,7 +57,7 @@ public class GTProfileController {
 	@GetMapping(value = "/gprofiles", consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<Object> getAllGTProfiles() {
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		List<GTProfile> gprofileList = gtprofileService.getAllGprofiles();
 		sb.append("<collection>");
 		for (GTProfile gprofile : gprofileList) {
@@ -68,11 +68,11 @@ public class GTProfileController {
 		sb.append("\n").append("</collection>");
 		Object result = sb.toString();
 
-		System.out.println("gprofileList value is " + result);
+		log.info("gprofileList value is " + result);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		return new ResponseEntity<Object>(result, headers, HttpStatus.OK);
+		return new ResponseEntity<>(result, headers, HttpStatus.OK);
 
 	}
 
@@ -81,7 +81,6 @@ public class GTProfileController {
 
 		GTProfile gprofile = gtprofileService.getGprofileById(id);
 
-		System.out.println("custList value is " + gprofile);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 

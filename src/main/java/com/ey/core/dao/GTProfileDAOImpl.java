@@ -35,7 +35,7 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 	public GTProfile getGprofileById(Integer id) {
 		log.debug("GET GTPrrofile DAO  ");
 		Optional<GTProfile> opGprofile = gprofileRepo.findById(id);
-		return opGprofile.get();
+		return opGprofile.isPresent() ? opGprofile.get() : null;
 	}
 
 	@Override

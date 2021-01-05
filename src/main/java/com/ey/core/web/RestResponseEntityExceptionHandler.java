@@ -24,7 +24,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		return new ResponseEntity<Object>(cve.getMessage(), headers, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(cve.getMessage(), headers, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler({ ValidationErrorException.class })
@@ -33,7 +33,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		return new ResponseEntity<Object>(vee.getMessage(), headers, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(vee.getMessage(), headers, HttpStatus.BAD_REQUEST);
 	}
 
 	// @ExceptionHandler({ SQLException.class })
@@ -42,8 +42,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		System.out.println("coming here in the SQL Exception............");
-		return new ResponseEntity<Object>(se.getMessage(), headers, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(se.getMessage(), headers, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)
@@ -58,7 +57,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			return new ResponseEntity<Object>(e.getMessage(), headers, HttpStatus.METHOD_NOT_ALLOWED);
 		}
 
-		return new ResponseEntity<Object>(e.getMessage(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(e.getMessage(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 
 	}
 

@@ -18,11 +18,11 @@ public class XMLConvertor {
 
 	JAXBContext context = null;
 
-	Class<?>[] META_CLASSES = { GTProfile.class };
+	Class<?>[] metaCLASSES = { GTProfile.class };
 
 	public XMLConvertor() {
 		try {
-			context = JAXBContext.newInstance(META_CLASSES);
+			context = JAXBContext.newInstance(metaCLASSES);
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
