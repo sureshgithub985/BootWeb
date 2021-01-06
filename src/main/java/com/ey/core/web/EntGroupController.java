@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ey.core.model.EntGroup;
+import com.ey.core.entity.EntGroup;
 import com.ey.core.service.EntGroupService;
 
 import lombok.extern.slf4j.Slf4j;

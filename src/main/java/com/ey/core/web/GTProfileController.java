@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ey.core.model.GTProfile;
-import com.ey.core.model.GTProfileDTO;
+import com.ey.core.dto.GTProfileDTO;
+import com.ey.core.entity.GTProfile;
 import com.ey.core.service.GTProfileService;
 import com.ey.core.util.XMLConvertor;
 

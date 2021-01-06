@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ey.core.dao.SubscriberDAO;
-import com.ey.core.model.Subscriber;
+import com.ey.core.entity.Subscriber;
 
 import lombok.extern.slf4j.Slf4j;
 

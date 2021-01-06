@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ey.core.model.GTProfile;
+import com.ey.core.entity.GTProfile;
 import com.ey.core.util.ResourceNotFoundException;
 import com.ey.core.util.ValidationErrorException;
 

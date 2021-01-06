@@ -3,7 +3,7 @@ package com.ey.core.service;
 
 import java.util.List;
 
-import com.ey.core.model.EntGroup;
+import com.ey.core.entity.EntGroup;
 
 public interface EntGroupService {
 

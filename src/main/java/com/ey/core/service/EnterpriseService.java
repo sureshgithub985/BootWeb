@@ -2,7 +2,7 @@ package com.ey.core.service;
 
 import java.util.List;
 
-import com.ey.core.model.Enterprise;
+import com.ey.core.entity.Enterprise;
 
 public interface EnterpriseService {
 

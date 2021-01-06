@@ -2,7 +2,7 @@ package com.ey.core.service;
 
 import java.util.List;
 
-import com.ey.core.model.Subscriber;
+import com.ey.core.entity.Subscriber;
 
 public interface SubscriberService {
 

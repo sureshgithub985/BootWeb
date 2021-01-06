@@ -2,7 +2,7 @@ package com.ey.core.service;
 
 import java.util.List;
 
-import com.ey.core.model.Customer;
+import com.ey.core.entity.Customer;
 
 public interface CustomerService {
 

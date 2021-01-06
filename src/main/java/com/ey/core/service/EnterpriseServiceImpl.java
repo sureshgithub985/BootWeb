@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ey.core.dao.EnterpriseDAO;
-import com.ey.core.model.Enterprise;
+import com.ey.core.entity.Enterprise;
 import com.ey.core.util.MessageUtil;
 import com.ey.core.util.ValidationErrorException;
 

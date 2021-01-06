@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.ey.core.model.Enterprise;
+import com.ey.core.entity.Enterprise;
 import com.ey.core.util.MessageUtil;
 import com.ey.core.util.ValidationErrorException;
 

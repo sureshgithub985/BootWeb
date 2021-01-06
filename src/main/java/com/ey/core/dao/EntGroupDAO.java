@@ -2,7 +2,7 @@ package com.ey.core.dao;
 
 import java.util.List;
 
-import com.ey.core.model.EntGroup;
+import com.ey.core.entity.EntGroup;
 
 public interface EntGroupDAO {
 

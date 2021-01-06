@@ -7,8 +7,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.ey.core.model.Address;
-import com.ey.core.model.Customer;
+import com.ey.core.entity.Address;
+import com.ey.core.entity.Customer;
 
 import lombok.extern.slf4j.Slf4j;
 

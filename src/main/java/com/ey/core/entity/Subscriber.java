@@ -1,6 +1,4 @@
-package com.ey.core.model;
-
-import java.io.Serializable;
+package com.ey.core.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -17,10 +16,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "shared_chat_group_info")
-public class EntGroup implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+@Table(name = "ptt_subscribers_info")
+public class Subscriber {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,22 +25,29 @@ public class EntGroup implements Serializable {
 	private Integer id;
 
 	@NotNull
-	@Size(min = 3, max = 24)
-	@Column(name = "name", unique = true)
-	private String name;
-
-	@Column(name = "ckr")
-	private Integer ckr;
+	@Range(min = 100, max = 99999999999999L)
+	@Column(name = "mdn")
+	private Long mdn;
 
 	@NotNull
 	@Column(name = "enterprise_name")
 	private String enterpriseName;
 
-	@Column(name = "sgid")
-	private String sgid;
+	@Column(name = "is_secure")
+	private Boolean isSecure;
 
-	@Range(min = 0, max = 1)
-	@Column(name = "group_type")
-	private Integer groupType;
+	@Size(min = 5, max = 15)
+	@Column(name = "ufmi")
+	private String ufmi;
 
+	@Size(min = 3, max = 24)
+	@Column(name = "user_name")
+	private String userName;
+
+	@Email
+	@Column(name = "email")
+	private String email;
+	
+	
 }
+

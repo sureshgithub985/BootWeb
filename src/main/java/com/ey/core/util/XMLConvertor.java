@@ -10,7 +10,8 @@ import javax.xml.bind.Unmarshaller;
 
 import org.springframework.stereotype.Component;
 
-import com.ey.core.model.GTProfileDTO;
+import com.ey.core.dto.EnterpriseDTO;
+import com.ey.core.dto.GTProfileDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +21,7 @@ public class XMLConvertor {
 
 	JAXBContext context = null;
 
-	Class<?>[] metaCLASSES = { GTProfileDTO.class };
+	Class<?>[] metaCLASSES = { GTProfileDTO.class, EnterpriseDTO.class };
 
 	public XMLConvertor() {
 		try {

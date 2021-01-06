@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ey.core.dao.GTProfileDAO;
-import com.ey.core.model.GTProfile;
+import com.ey.core.entity.GTProfile;
 
 @Service
 public class GTProfileServiceImpl implements GTProfileService {

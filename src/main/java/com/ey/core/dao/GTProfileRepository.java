@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ey.core.model.GTProfile;
+import com.ey.core.entity.GTProfile;
 
 public interface GTProfileRepository extends JpaRepository<GTProfile, Integer> {
 

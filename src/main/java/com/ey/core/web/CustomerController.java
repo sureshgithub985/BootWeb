@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ey.core.model.Customer;
+import com.ey.core.entity.Customer;
 import com.ey.core.service.CustomerService;
 
 import lombok.extern.slf4j.Slf4j;

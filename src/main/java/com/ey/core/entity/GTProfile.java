@@ -1,4 +1,4 @@
-package com.ey.core.model;
+package com.ey.core.entity;
 
 import java.io.Serializable;
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ey.core.model.Enterprise;
+import com.ey.core.entity.Enterprise;
 import com.ey.core.service.EnterpriseService;
 
 import io.swagger.annotations.Api;

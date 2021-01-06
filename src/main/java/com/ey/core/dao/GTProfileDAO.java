@@ -2,7 +2,7 @@ package com.ey.core.dao;
 
 import java.util.List;
 
-import com.ey.core.model.GTProfile;
+import com.ey.core.entity.GTProfile;
 
 public interface GTProfileDAO {
 
