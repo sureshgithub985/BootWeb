@@ -70,9 +70,9 @@ public class EnterpriseDAOImpl implements EnterpriseDAO {
 
 			if (!set.contains(ckr))
 				throw new ValidationErrorException(MessageUtil.CKR_NOT_IN_CKRLIST);
-		} else if (ckrList == null && ckr == null)
-			return;
-		else
+		} else if (ckrList == null && ckr == null) {
+			log.debug("Both are Null, by-passing this request");
+		} else
 			throw new ValidationErrorException(MessageUtil.BOTH_CKR_CKRLIST_REQUIRED);
 
 	}

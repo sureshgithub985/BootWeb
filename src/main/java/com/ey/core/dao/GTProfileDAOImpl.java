@@ -62,9 +62,7 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 	public GTProfile getGprofileById(Integer id) {
 		log.debug("GET GTPrrofile DAO  ");
 
-		GTProfile opGprofile = groupProfileIdCheck(id, 1);
-
-		return opGprofile;
+		return groupProfileIdCheck(id, 1);
 	}
 
 	@Override
@@ -82,18 +80,20 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 
 		GTProfile oldGFprofile = groupProfileIdCheck(id, 1);
 
-		Optional<GTProfile> opGprofileNameExists = gprofileRepo.findByName(gprofile.getName());
-		if (opGprofileNameExists.isPresent() && !oldGFprofile.getName().equals(gprofile.getName()))
-			throw new ValidationErrorException("Profile Name already exists");
+		if (oldGFprofile != null) {
+			Optional<GTProfile> opGprofileNameExists = gprofileRepo.findByName(gprofile.getName());
+			if (opGprofileNameExists.isPresent() && !oldGFprofile.getName().equals(gprofile.getName()))
+				throw new ValidationErrorException("Profile Name already exists");
 
-		if (gprofile.getName() != null)
-			oldGFprofile.setName(gprofile.getName());
-		if (gprofile.getCallSetupPriority() != null)
-			oldGFprofile.setCallSetupPriority(gprofile.getCallSetupPriority());
-		if (gprofile.getIsCallSetupPreemptionEnabled() != null)
-			oldGFprofile.setIsCallSetupPreemptionEnabled(gprofile.getIsCallSetupPreemptionEnabled());
+			if (gprofile.getName() != null)
+				oldGFprofile.setName(gprofile.getName());
+			if (gprofile.getCallSetupPriority() != null)
+				oldGFprofile.setCallSetupPriority(gprofile.getCallSetupPriority());
+			if (gprofile.getIsCallSetupPreemptionEnabled() != null)
+				oldGFprofile.setIsCallSetupPreemptionEnabled(gprofile.getIsCallSetupPreemptionEnabled());
 
-		gprofileRepo.save(oldGFprofile);
+			gprofileRepo.save(oldGFprofile);
+		}
 	}
 
 }
