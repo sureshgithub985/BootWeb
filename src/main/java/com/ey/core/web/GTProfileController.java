@@ -49,7 +49,7 @@ public class GTProfileController {
 	public ResponseEntity<Void> createGroupProfile(@RequestBody GTProfileDTO gtprofile,
 			UriComponentsBuilder uriBuilder) {
 
-		System.out.println(" Create GroupProfile Controller " + request.getContentType());
+		log.info(" Create GroupProfile Controller " + request.getContentType());
 
 		HttpHeaders headers = addHeaders(request);
 

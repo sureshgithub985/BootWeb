@@ -1,14 +1,12 @@
 package com.ey.core.web;
 
-import java.sql.SQLException;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
+import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -19,66 +17,47 @@ import com.ey.core.util.ValidationErrorException;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler({ ConstraintViolationException.class })
-	public ResponseEntity<Object> handleExceptionHandler(ConstraintViolationException cve) {
+	public static final String VALIDATION_ERROR_MSG = "<error>\n" + "<error-type>ValidationError</error-type>\n"
+			+ "<message>";
+	public static final String NOT_FOUND_MSG = "<error>\n" + "<error-type>NotFound</error-type>\n" + "<message>";
+	public static final String MESSAGE_AND_ERROR_CLOSE = "</message>\n" + "</error>";
+	public static final String ERROR_TYPE = "error-type";
+	public static final String MESSAGE = "message";
+
+	@ExceptionHandler({ Exception.class })
+	public ResponseEntity<Object> handleExceptionHandler(Exception ex, HttpServletRequest request) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add("Content-Type", request.getContentType());
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("<error>\n<error-type>ValidationError</error-type>").append("\n").append("<message>")
-				.append(cve.getMessage()).append("</message>\n</error>");
-		return new ResponseEntity<>(sb.toString(), headers, HttpStatus.BAD_REQUEST);
-	}
+		if (ex instanceof ConstraintViolationException || ex instanceof ValidationErrorException) {
 
-	@ExceptionHandler({ ValidationErrorException.class })
-	public ResponseEntity<Object> handleValidationErrorExceptionHandler(ValidationErrorException vee) {
+			if (request.getContentType().equals("application/xml")) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(VALIDATION_ERROR_MSG).append(ex.getMessage()).append(MESSAGE_AND_ERROR_CLOSE);
+				return new ResponseEntity<>(sb.toString(), headers, HttpStatus.BAD_REQUEST);
+			} else {
+				JSONObject jsonObj = new JSONObject();
+				jsonObj.put(ERROR_TYPE, "ValidationError");
+				jsonObj.put(MESSAGE, ex.getMessage());
+				return new ResponseEntity<>(jsonObj.toString(), headers, HttpStatus.BAD_REQUEST);
+			}
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		} else if (ex instanceof ResourceNotFoundException) {
+			if (request.getContentType().equals("application/xml")) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(NOT_FOUND_MSG).append(ex.getMessage()).append(MESSAGE_AND_ERROR_CLOSE);
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("<error>\n<error-type>ValidationError</error-type>").append("\n").append("<message>")
-				.append(vee.getMessage()).append("</message>\n</error>");
+				return new ResponseEntity<>(sb.toString(), headers, HttpStatus.NOT_FOUND);
+			} else {
+				JSONObject jsonObj = new JSONObject();
+				jsonObj.put(ERROR_TYPE, "NotFound");
+				jsonObj.put(MESSAGE, ex.getMessage());
+				return new ResponseEntity<>(jsonObj.toString(), headers, HttpStatus.NOT_FOUND);
+			}
 
-		return new ResponseEntity<>(sb.toString(), headers, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler({ ResourceNotFoundException.class })
-	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException vee) {
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("<error>\n<error-type>NotFound</error-type>").append("\n").append("<message>")
-				.append(vee.getMessage()).append("</message>\n</error>");
-
-		return new ResponseEntity<>(sb.toString(), headers, HttpStatus.NOT_FOUND);
-	}
-
-	// @ExceptionHandler({ SQLException.class })
-	public ResponseEntity<Object> handleSQLExceptionHandler(SQLException se) {
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		return new ResponseEntity<>(se.getMessage(), headers, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> handlerequiredHttpRequestMethodNotSupportedException(Exception e) {
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		if (e instanceof HttpRequestMethodNotSupportedException) {
-
-			System.out.println("coming requets here......");
-			return new ResponseEntity<Object>(e.getMessage(), headers, HttpStatus.METHOD_NOT_ALLOWED);
-		}
-
-		return new ResponseEntity<>(e.getMessage(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		} else
+			return new ResponseEntity<>(ex.getMessage(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
 
 	}
 
