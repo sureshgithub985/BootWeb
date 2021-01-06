@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ey.core.model.GTProfile;
+import com.ey.core.util.ResourceNotFoundException;
+import com.ey.core.util.ValidationErrorException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,35 +24,77 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 	@Override
 	public void save(GTProfile gprofile) {
 		log.debug("Create GTPrrofile DAO  " + gprofile);
+
+		groupProfileIdCheck(gprofile.getId(), 0);
+		groupProfileNameCheck(gprofile.getName());
+
 		gprofileRepo.save(gprofile);
+	}
+
+	private void groupProfileNameCheck(String name) {
+
+		Optional<GTProfile> opGprofileNameExists = gprofileRepo.findByName(name);
+		if (opGprofileNameExists.isPresent())
+			throw new ValidationErrorException("Profile Name already exists");
+
+	}
+
+	private Optional<GTProfile> groupProfileIdCheck(Integer id, int op) {
+
+		Optional<GTProfile> opGprofileIdExists = gprofileRepo.findById(id);
+		if (opGprofileIdExists.isPresent() && op == 0)
+			throw new ValidationErrorException("Profile ID already exists");
+		else if (!opGprofileIdExists.isPresent() && op == 1)
+			throw new ResourceNotFoundException("Cannot find object with given id");
+
+		return opGprofileIdExists;
+
 	}
 
 	@Override
 	public List<GTProfile> findAllGprofiles() {
 		log.debug("GETALL GTPrrofile DAO  ");
+
 		return gprofileRepo.findAll();
 	}
 
 	@Override
 	public GTProfile getGprofileById(Integer id) {
 		log.debug("GET GTPrrofile DAO  ");
-		Optional<GTProfile> opGprofile = gprofileRepo.findById(id);
-		return opGprofile.isPresent() ? opGprofile.get() : null;
+
+		Optional<GTProfile> opGprofile = groupProfileIdCheck(id, 1);
+
+		return opGprofile.get();
 	}
 
 	@Override
-	public GTProfile deleteGprofileById(Integer id) {
+	public void deleteGprofileById(Integer id) {
 		log.debug("Delete GTPrrofile DAO  ");
+
+		groupProfileIdCheck(id, 1);
+
 		gprofileRepo.deleteById(id);
-		return null;
 	}
 
 	@Override
-	public GTProfile updateGprofile(Integer id, GTProfile gprofile) {
+	public void updateGprofile(Integer id, GTProfile gprofile) {
 		log.debug("Update GTPrrofile DAO  ");
-		gprofileRepo.save(null);
 
-		return null;
+		Optional<GTProfile> opGprofile = groupProfileIdCheck(id, 1);
+
+		Optional<GTProfile> opGprofileNameExists = gprofileRepo.findByName(gprofile.getName());
+		if (opGprofileNameExists.isPresent() && !opGprofile.get().getName().equals(gprofile.getName()))
+			throw new ValidationErrorException("Profile Name already exists");
+
+		GTProfile oldGFprofile = opGprofile.get();
+		if (gprofile.getName() != null)
+			oldGFprofile.setName(gprofile.getName());
+		if (gprofile.getCallSetupPriority() != null)
+			oldGFprofile.setCallSetupPriority(gprofile.getCallSetupPriority());
+		if (gprofile.getIsCallSetupPreemptionEnabled() != null)
+			oldGFprofile.setIsCallSetupPreemptionEnabled(gprofile.getIsCallSetupPreemptionEnabled());
+
+		gprofileRepo.save(oldGFprofile);
 	}
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.ey.core.util.ResourceNotFoundException;
 import com.ey.core.util.ValidationErrorException;
 
 @ControllerAdvice
@@ -24,7 +25,10 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		return new ResponseEntity<>(cve.getMessage(), headers, HttpStatus.BAD_REQUEST);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<error>\n<error-type>ValidationError</error-type>").append("\n").append("<message>")
+				.append(cve.getMessage()).append("</message>\n</error>");
+		return new ResponseEntity<>(sb.toString(), headers, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler({ ValidationErrorException.class })
@@ -33,7 +37,24 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		return new ResponseEntity<>(vee.getMessage(), headers, HttpStatus.BAD_REQUEST);
+		StringBuilder sb = new StringBuilder();
+		sb.append("<error>\n<error-type>ValidationError</error-type>").append("\n").append("<message>")
+				.append(vee.getMessage()).append("</message>\n</error>");
+
+		return new ResponseEntity<>(sb.toString(), headers, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler({ ResourceNotFoundException.class })
+	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException vee) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("<error>\n<error-type>NotFound</error-type>").append("\n").append("<message>")
+				.append(vee.getMessage()).append("</message>\n</error>");
+
+		return new ResponseEntity<>(sb.toString(), headers, HttpStatus.NOT_FOUND);
 	}
 
 	// @ExceptionHandler({ SQLException.class })

@@ -32,14 +32,14 @@ public class GTProfileServiceImpl implements GTProfileService {
 	}
 
 	@Override
-	public GTProfile deleteGroupProfileById(Integer id) {
-		return gtprofileDAO.deleteGprofileById(id);
+	public void deleteGroupProfileById(Integer id) {
+		gtprofileDAO.deleteGprofileById(id);
 	}
 
 	@Override
-	public GTProfile updateGprofile(Integer id, GTProfile gprofile) {
+	public void updateGprofile(Integer id, GTProfile gprofile) {
 
-		return gtprofileDAO.updateGprofile(id, gprofile);
+		 gtprofileDAO.updateGprofile(id, gprofile);
 	}
 
 }

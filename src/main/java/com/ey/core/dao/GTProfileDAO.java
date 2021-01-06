@@ -12,8 +12,8 @@ public interface GTProfileDAO {
 
 	public GTProfile getGprofileById(Integer id);
 
-	public GTProfile deleteGprofileById(Integer id);
+	public void deleteGprofileById(Integer id);
 
-	public GTProfile updateGprofile(Integer id, GTProfile gprofile);
+	public void updateGprofile(Integer id, GTProfile gprofile);
 
 }

@@ -12,8 +12,8 @@ public interface GTProfileService {
 
 	public GTProfile getGprofileById(Integer id);
 
-	public GTProfile deleteGroupProfileById(Integer id);
+	public void deleteGroupProfileById(Integer id);
 
-	public GTProfile updateGprofile(Integer id, GTProfile cust);
+	public void updateGprofile(Integer id, GTProfile cust);
 
 }

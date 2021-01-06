@@ -2,6 +2,8 @@ package com.ey.core.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,12 +36,15 @@ public class GTProfileController {
 	@Autowired
 	private XMLConvertor xc;
 
+	@Autowired
+	private HttpServletRequest request;
+
 	@PostMapping(value = "/gprofiles", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<Void> createGroupProfile(@RequestBody GTProfile gprofile, UriComponentsBuilder uriBuilder) {
-		log.debug(" Create GroupProfile Controller ");
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		System.out.println(" Create GroupProfile Controller " + request.getContentType());
+
+		HttpHeaders headers = addHeaders(request);
 
 		if (gprofile != null) {
 			gtprofileService.addGprofile(gprofile);
@@ -54,64 +59,90 @@ public class GTProfileController {
 
 	}
 
-	@GetMapping(value = "/gprofiles", consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_XML_VALUE })
+	private HttpHeaders addHeaders(HttpServletRequest request) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", request.getContentType());
+		if (request.getMethod().equalsIgnoreCase("GET"))
+			headers.add("Accept", request.getHeader("Accept"));
+
+		return headers;
+	}
+
+	@GetMapping(value = "/gprofiles", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<Object> getAllGTProfiles() {
 
-		StringBuilder sb = new StringBuilder();
 		List<GTProfile> gprofileList = gtprofileService.getAllGprofiles();
-		sb.append("<collection>");
-		for (GTProfile gprofile : gprofileList) {
-			sb.append("\n");
-			String inXml = xc.toXml(gprofile);
-			sb.append(inXml);
+
+		HttpHeaders headers = addHeaders(request);
+
+		if (request.getContentType().equals("application/xml")) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("<collection>");
+			for (GTProfile gprofile : gprofileList) {
+				sb.append("\n");
+				String inXml = xc.toXml(gprofile);
+				sb.append(inXml);
+			}
+			sb.append("\n").append("</collection>");
+			Object result = sb.toString();
+
+			return new ResponseEntity<>(result, headers, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(gprofileList, headers, HttpStatus.OK);
 		}
-		sb.append("\n").append("</collection>");
-		Object result = sb.toString();
-
-		log.info("gprofileList value is " + result);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		return new ResponseEntity<>(result, headers, HttpStatus.OK);
 
 	}
 
-	@GetMapping("/gprofiles/{id}")
-	public ResponseEntity<GTProfile> getCustomer(@PathVariable("id") int id) {
+	@GetMapping(value = "/gprofiles/{id}", produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Object> getCustomer(@PathVariable("id") int id) {
 
 		GTProfile gprofile = gtprofileService.getGprofileById(id);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = addHeaders(request);
 
-		return new ResponseEntity<>(gprofile, headers, HttpStatus.OK);
+		if (request.getContentType().equals("application/xml")) {
+			String inXml = xc.toXml(gprofile);
+			return new ResponseEntity<>(inXml, headers, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(gprofile, headers, HttpStatus.OK);
+		}
 
 	}
 
-	@DeleteMapping("/gprofiles/{id}")
-	public ResponseEntity<GTProfile> deleteGroupProfile(@PathVariable("id") int id) {
+	@DeleteMapping(value = "/gprofiles/{id}", produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<GTProfile> deleteGroupProfile(@PathVariable("id") Integer id) {
 
 		log.debug(" Delete GTProfile Controller ");
 
-		gtprofileService.deleteGroupProfileById(id);
+		HttpHeaders headers = addHeaders(request);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		if (id != null) {
+			gtprofileService.deleteGroupProfileById(id);
 
-		return new ResponseEntity<>(headers, HttpStatus.OK);
+			return new ResponseEntity<>(headers, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
 	}
 
-	@PutMapping("/gprofiles/{id}")
-	public ResponseEntity<Void> updateEnterprise(@RequestBody GTProfile gprofile, @PathVariable("id") int id) {
+	@PutMapping(value = "/gprofiles/{id}", produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE })
+	public ResponseEntity<Void> updateEnterprise(@RequestBody GTProfile gprofile, @PathVariable("id") Integer id) {
 
 		log.debug(" Update Enterprise Controller ");
+		HttpHeaders headers = addHeaders(request);
 
-		gtprofileService.updateGprofile(id, gprofile);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		if (id != null && gprofile != null) {
+			gtprofileService.updateGprofile(id, gprofile);
 
-		return new ResponseEntity<>(headers, HttpStatus.OK);
+			return new ResponseEntity<>(headers, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }
