@@ -10,7 +10,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.springframework.stereotype.Component;
 
-import com.ey.core.model.GTProfile;
+import com.ey.core.model.GTProfileDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +20,7 @@ public class XMLConvertor {
 
 	JAXBContext context = null;
 
-	Class<?>[] metaCLASSES = { GTProfile.class };
+	Class<?>[] metaCLASSES = { GTProfileDTO.class };
 
 	public XMLConvertor() {
 		try {

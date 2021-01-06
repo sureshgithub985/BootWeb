@@ -1,9 +1,11 @@
 package com.ey.core.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.ey.core.model.GTProfile;
+import com.ey.core.model.GTProfileDTO;
 import com.ey.core.service.GTProfileService;
 import com.ey.core.util.XMLConvertor;
 
@@ -39,14 +42,20 @@ public class GTProfileController {
 	@Autowired
 	private HttpServletRequest request;
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	@PostMapping(value = "/gprofiles", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Void> createGroupProfile(@RequestBody GTProfile gprofile, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<Void> createGroupProfile(@RequestBody GTProfileDTO gtprofile,
+			UriComponentsBuilder uriBuilder) {
 
 		System.out.println(" Create GroupProfile Controller " + request.getContentType());
 
 		HttpHeaders headers = addHeaders(request);
 
-		if (gprofile != null) {
+		if (gtprofile != null) {
+
+			GTProfile gprofile = modelMapper.map(gtprofile, GTProfile.class);
 			gtprofileService.addGprofile(gprofile);
 
 			headers.setLocation(
@@ -80,8 +89,9 @@ public class GTProfileController {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<collection>");
 			for (GTProfile gprofile : gprofileList) {
+				GTProfileDTO gprofileDTO = modelMapper.map(gprofile, GTProfileDTO.class);
 				sb.append("\n");
-				String inXml = xc.toXml(gprofile);
+				String inXml = xc.toXml(gprofileDTO);
 				sb.append(inXml);
 			}
 			sb.append("\n").append("</collection>");
@@ -89,7 +99,14 @@ public class GTProfileController {
 
 			return new ResponseEntity<>(result, headers, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(gprofileList, headers, HttpStatus.OK);
+			// need to refactor the code
+			List<GTProfileDTO> resultList = new ArrayList<>();
+
+			for (GTProfile gprofile : gprofileList) {
+				GTProfileDTO gprofileDTO = modelMapper.map(gprofile, GTProfileDTO.class);
+				resultList.add(gprofileDTO);
+			}
+			return new ResponseEntity<>(resultList, headers, HttpStatus.OK);
 		}
 
 	}
@@ -100,13 +117,15 @@ public class GTProfileController {
 
 		GTProfile gprofile = gtprofileService.getGprofileById(id);
 
+		GTProfileDTO gprofileDTO = modelMapper.map(gprofile, GTProfileDTO.class);
+
 		HttpHeaders headers = addHeaders(request);
 
 		if (request.getContentType().equals("application/xml")) {
-			String inXml = xc.toXml(gprofile);
+			String inXml = xc.toXml(gprofileDTO);
 			return new ResponseEntity<>(inXml, headers, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(gprofile, headers, HttpStatus.OK);
+			return new ResponseEntity<>(gprofileDTO, headers, HttpStatus.OK);
 		}
 
 	}
@@ -131,12 +150,14 @@ public class GTProfileController {
 
 	@PutMapping(value = "/gprofiles/{id}", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Void> updateEnterprise(@RequestBody GTProfile gprofile, @PathVariable("id") Integer id) {
+	public ResponseEntity<Void> updateEnterprise(@RequestBody GTProfileDTO gprofileDTO,
+			@PathVariable("id") Integer id) {
 
 		log.debug(" Update Enterprise Controller ");
 		HttpHeaders headers = addHeaders(request);
 
-		if (id != null && gprofile != null) {
+		if (id != null && gprofileDTO != null) {
+			GTProfile gprofile = modelMapper.map(gprofileDTO, GTProfile.class);
 			gtprofileService.updateGprofile(id, gprofile);
 
 			return new ResponseEntity<>(headers, HttpStatus.OK);
