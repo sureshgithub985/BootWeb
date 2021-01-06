@@ -39,7 +39,7 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 
 	}
 
-	private Optional<GTProfile> groupProfileIdCheck(Integer id, int op) {
+	private GTProfile groupProfileIdCheck(Integer id, int op) {
 
 		Optional<GTProfile> opGprofileIdExists = gprofileRepo.findById(id);
 		if (opGprofileIdExists.isPresent() && op == 0)
@@ -47,7 +47,7 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 		else if (!opGprofileIdExists.isPresent() && op == 1)
 			throw new ResourceNotFoundException("Cannot find object with given id");
 
-		return opGprofileIdExists;
+		return opGprofileIdExists.get();
 
 	}
 
@@ -62,9 +62,9 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 	public GTProfile getGprofileById(Integer id) {
 		log.debug("GET GTPrrofile DAO  ");
 
-		Optional<GTProfile> opGprofile = groupProfileIdCheck(id, 1);
+		GTProfile opGprofile = groupProfileIdCheck(id, 1);
 
-		return opGprofile.get();
+		return opGprofile;
 	}
 
 	@Override
@@ -80,13 +80,12 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 	public void updateGprofile(Integer id, GTProfile gprofile) {
 		log.debug("Update GTPrrofile DAO  ");
 
-		Optional<GTProfile> opGprofile = groupProfileIdCheck(id, 1);
+		GTProfile oldGFprofile = groupProfileIdCheck(id, 1);
 
 		Optional<GTProfile> opGprofileNameExists = gprofileRepo.findByName(gprofile.getName());
-		if (opGprofileNameExists.isPresent() && !opGprofile.get().getName().equals(gprofile.getName()))
+		if (opGprofileNameExists.isPresent() && !oldGFprofile.getName().equals(gprofile.getName()))
 			throw new ValidationErrorException("Profile Name already exists");
 
-		GTProfile oldGFprofile = opGprofile.get();
 		if (gprofile.getName() != null)
 			oldGFprofile.setName(gprofile.getName());
 		if (gprofile.getCallSetupPriority() != null)
