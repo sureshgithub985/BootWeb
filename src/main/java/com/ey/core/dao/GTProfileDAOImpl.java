@@ -47,7 +47,7 @@ public class GTProfileDAOImpl implements GTProfileDAO {
 		else if (!opGprofileIdExists.isPresent() && op == 1)
 			throw new ResourceNotFoundException("Cannot find object with given id");
 
-		return opGprofileIdExists.get();
+		return opGprofileIdExists.isPresent() ? opGprofileIdExists.get() : null;
 
 	}
 
