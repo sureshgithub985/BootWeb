@@ -10,10 +10,10 @@ public interface CustomerService {
 
 	public List<Customer> getAllCustomers();
 
-	public Customer getCustomerByName(String name);
+	public Customer getCustomerByEmail(String email);
 
-	public Customer deleteCustomerByName(String name);
+	public void deleteCustomerByEmail(String email);
 
-	public Customer updateCustomer(String name, Customer cust);
+	public void updateCustomer(Customer cust, String email);
 
 }

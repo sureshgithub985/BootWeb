@@ -6,6 +6,8 @@ import com.ey.core.entity.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, String> {
 
-	public Customer findByfirstName(String firstName);
+	public Customer findByEmail(String email);
+
+	public void deleteByEmail(String email);
 
 }

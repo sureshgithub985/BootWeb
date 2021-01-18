@@ -10,10 +10,10 @@ public interface CustomerDAO {
 
 	public List<Customer> getAllCustomers();
 
-	public Customer findByCustomerName(String name);
+	public Customer findByEmail(String email);
 
-	public Customer deleteByName(String name);
+	public void deleteByEmail(String email);
 
-	public Customer updateEnterpise(String name, Customer cust);
+	public void updateCustomer(Customer cust, String email);
 
 }

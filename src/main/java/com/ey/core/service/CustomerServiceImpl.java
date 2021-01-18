@@ -19,32 +19,33 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public void addCustomer(Customer cust) {
-		log.debug("customer reached service " + cust);
+		log.debug("Add Customer Service ");
 		custDAO.createCustomer(cust);
 	}
 
 	@Override
 	public List<Customer> getAllCustomers() {
-
+		log.debug("GetAll Customer Service ");
 		return custDAO.getAllCustomers();
 	}
 
 	@Override
-	public Customer getCustomerByName(String name) {
-
-		return custDAO.findByCustomerName(name);
+	public Customer getCustomerByEmail(String email) {
+		log.debug("GetByEmail Customer Service ");
+		return custDAO.findByEmail(email);
 	}
 
 	@Override
-	public Customer deleteCustomerByName(String name) {
-
-		return null;
+	public void deleteCustomerByEmail(String email) {
+		log.debug("Delete Customer Service ");
+		custDAO.deleteByEmail(email);
 	}
 
 	@Override
-	public Customer updateCustomer(String name, Customer cust) {
+	public void updateCustomer(Customer cust, String email) {
+		log.debug("Update Customer Service ");
+		custDAO.updateCustomer(cust, email);
 
-		return null;
 	}
 
 }

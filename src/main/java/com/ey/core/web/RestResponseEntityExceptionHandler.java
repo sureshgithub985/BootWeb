@@ -28,11 +28,15 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	public ResponseEntity<Object> handleExceptionHandler(Exception ex, HttpServletRequest request) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", request.getContentType());
+		String contentType = request.getContentType();
+		if (contentType == null)
+			contentType = "application/json";
+
+		headers.add("Content-Type", contentType);
 
 		if (ex instanceof ConstraintViolationException || ex instanceof ValidationErrorException) {
 
-			if (request.getContentType().equals("application/xml")) {
+			if (contentType.equals("application/xml")) {
 				StringBuilder sb = new StringBuilder();
 				sb.append(VALIDATION_ERROR_MSG).append(ex.getMessage()).append(MESSAGE_AND_ERROR_CLOSE);
 				return new ResponseEntity<>(sb.toString(), headers, HttpStatus.BAD_REQUEST);
@@ -44,7 +48,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			}
 
 		} else if (ex instanceof ResourceNotFoundException) {
-			if (request.getContentType().equals("application/xml")) {
+			if (contentType.equals("application/xml")) {
 				StringBuilder sb = new StringBuilder();
 				sb.append(NOT_FOUND_MSG).append(ex.getMessage()).append(MESSAGE_AND_ERROR_CLOSE);
 

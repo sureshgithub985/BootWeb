@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,22 +38,23 @@ public class CustomerController {
 
 	@Autowired
 	private ModelMapper modelMapper;
-	
-	
+
 	@Autowired
 	private HttpServletRequest request;
 
 	@PostMapping("/customers")
-	public ResponseEntity<Void> createCustomer(@RequestBody CustomerDTO custDTO, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<Void> createCustomer(@RequestBody @Valid CustomerDTO custDTO,
+			UriComponentsBuilder uriBuilder) {
 
 		Date date = new Date();
 		custDTO.setUpdatedAt(date);
 
-		log.info("we are in the CreateEnterprise Controller...." + custDTO);
+		String contentValue = request.getContentType();
 
-	
+		log.info("Add Customer Controller " + contentValue);
+
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add("Content-Type", contentValue);
 
 		Customer cust = modelMapper.map(custDTO, Customer.class);
 		custService.addCustomer(cust);
@@ -62,9 +65,10 @@ public class CustomerController {
 		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 
 	}
-	
-	@PutMapping("/customers/{id}")
-	public ResponseEntity<Void> updateCustomer(@RequestBody CustomerDTO custDTO, @PathVariable("name") String name) {
+
+	@PutMapping("/customers/{email}")
+	public ResponseEntity<Void> updateCustomer(@RequestBody @Valid CustomerDTO custDTO,
+			@PathVariable("email") String email) {
 
 		Date date = new Date();
 		custDTO.setUpdatedAt(date);
@@ -75,12 +79,12 @@ public class CustomerController {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		Customer cust = modelMapper.map(custDTO, Customer.class);
-		custService.addCustomer(cust);
+
+		custService.updateCustomer(cust, email);
 
 		return new ResponseEntity<>(headers, HttpStatus.CREATED);
 
 	}
-	
 
 	@GetMapping("/customers")
 	public ResponseEntity<List<Customer>> getAllCustomers() {
@@ -94,10 +98,22 @@ public class CustomerController {
 
 	}
 
-	@GetMapping("/customers/{firstName}")
-	public ResponseEntity<Customer> getCustomer(@PathVariable("firstName") String firstName) {
+	@DeleteMapping("/customers/{email}")
+	public ResponseEntity<Void> deleteCustomerByEmail(@PathVariable("email") String email) {
 
-		Customer cust = custService.getCustomerByName(firstName);
+		custService.deleteCustomerByEmail(email);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return new ResponseEntity<>(headers, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/customers/{email}")
+	public ResponseEntity<Customer> getCustomer(@PathVariable("email") String email) {
+
+		Customer cust = custService.getCustomerByEmail(email);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);

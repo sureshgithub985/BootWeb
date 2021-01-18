@@ -3,8 +3,6 @@ package com.ey.core.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class CustomerDTO {
 
 	private Integer id;
@@ -16,7 +14,7 @@ public class CustomerDTO {
 	private Long phone;
 
 	private Date updatedAt;
-	
+
 	private List<AddressDTO> address;
 
 	public Integer getId() {

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -25,15 +26,19 @@ public class Address implements Serializable {
 	@Column(name = "address_id")
 	private Integer addressId;
 
+	@NotNull
 	@Column(name = "street")
 	private String street;
 
+	@NotNull
 	@Column(name = "city")
 	private String city;
 
+	@NotNull
 	@Column(name = "state")
 	private String state;
 
+	@NotNull
 	@Column(name = "zip_code")
 	private String zipCode;
 

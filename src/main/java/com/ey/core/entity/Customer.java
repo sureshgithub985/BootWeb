@@ -22,7 +22,6 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Table(name = "whlr_customer_detail")
@@ -46,10 +45,12 @@ public class Customer implements Serializable {
 	@Column(name = "last_name")
 	private String lastName;
 
+	@NotNull
 	@Email
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
 	private String email;
 
+	@NotNull
 	@Range(max = 9999999999L)
 	@Column(name = "phone")
 	private Long phone;
