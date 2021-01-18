@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ey.core.entity.Address;
 import com.ey.core.entity.Customer;
+import com.ey.core.util.MessageUtil;
 import com.ey.core.util.ResourceNotFoundException;
 import com.ey.core.util.ValidationErrorException;
 
@@ -31,7 +32,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			throw new ValidationErrorException("User already Exists");
 
 		List<Address> addList = cust.getAddress();
-		System.out.println("addList value is " + addList);
+		log.debug("addList value is " + addList);
 		if (null != addList) {
 			for (Address add : addList) {
 				add.setCustomer(cust);
@@ -53,7 +54,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		Customer cust = custRepository.findByEmail(email);
 
 		if (cust == null)
-			throw new ResourceNotFoundException("Cannot find object with given id");
+			throw new ResourceNotFoundException(MessageUtil.NOT_FOUND_MSG);
 
 		return cust;
 	}
@@ -63,7 +64,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		log.debug(" Delete Customer DAO ");
 		Customer cust = custRepository.findByEmail(email);
 		if (cust == null)
-			throw new ResourceNotFoundException("Cannot find object with given id");
+			throw new ResourceNotFoundException(MessageUtil.NOT_FOUND_MSG);
 
 		custRepository.deleteByEmail(email);
 	}
@@ -86,7 +87,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			cust1.setUpdatedAt(cust.getUpdatedAt());
 			custRepository.save(cust1);
 		} else
-			throw new ResourceNotFoundException("Cannot find object with given id");
+			throw new ResourceNotFoundException(MessageUtil.NOT_FOUND_MSG);
 
 	}
 

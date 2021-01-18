@@ -15,5 +15,6 @@ public class MessageUtil {
 	public static final String NAME_ALREADY_EXISTS = "Name already exists";
 	public static final String NAME_DOESNOT_EXISTS = "Name doesnot exists";
 	public static final String CKR_CANNOT_BE_APPLIED_TO_NON_SECURE_ENTERPRISE = "ckr cannot be applied to non secure enterprise groups";
+	public static final String NOT_FOUND_MSG = "Cannot find object with given id";
 
 }

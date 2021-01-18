@@ -83,6 +83,12 @@
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20201115</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.vaadin.external.google</groupId>
+					<artifactId>android-json</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>
