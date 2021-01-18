@@ -8,9 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SpringBootWebApplicationTests {
 
-
 	@Test
-	public void returnTrue() {
+	void returnTrue() {
 		assertTrue(true);
 	}
 }

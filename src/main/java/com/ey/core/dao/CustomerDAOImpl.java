@@ -25,10 +25,13 @@ public class CustomerDAOImpl implements CustomerDAO {
 		log.debug(" Create Customer DAO ");
 
 		List<Address> addList = cust.getAddress();
-		for (Address add : addList) {
-			add.setCustomer(cust);
-		}
+		System.out.println("addList value is "+addList);
+		if (null != addList) {
+			for (Address add : addList) {
+				add.setCustomer(cust);
+			}
 
+		}
 		custRepository.save(cust);
 	}
 

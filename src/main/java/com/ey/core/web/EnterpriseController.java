@@ -2,6 +2,7 @@ package com.ey.core.web;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.ey.core.dto.EnterpriseDTO;
 import com.ey.core.entity.Enterprise;
 import com.ey.core.service.EnterpriseService;
 
@@ -33,14 +35,18 @@ public class EnterpriseController {
 	@Autowired
 	private EnterpriseService entServie;
 
+	@Autowired
+	private ModelMapper modelMapper;
+
 	@PostMapping("/enterprises")
-	public ResponseEntity<Void> createEnterprise(@RequestBody Enterprise ent, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<Void> createEnterprise(@RequestBody EnterpriseDTO entDTO, UriComponentsBuilder uriBuilder) {
 		log.debug(" Create Enterprise Controller ");
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		if (ent != null) {
+		if (entDTO != null) {
+			Enterprise ent = modelMapper.map(entDTO, Enterprise.class);
 			entServie.addEnterprise(ent);
 
 			headers.setLocation(
