@@ -19,5 +19,6 @@ public class MessageUtil {
 	public static final String AGE_TIMER_GRATER_MSG = "Age Off Timer must be greater than Registration Timer";
 	public static final String PROFILE_ID_EXISTS = "Profile ID already exists";
 	public static final String PROFILE_NAME_EXISTS = "Profile Name already exists";
+	public static final String MODEL_MAPPER_CONVERSION_FAILED = "Model mapper converion failed";
 
 }

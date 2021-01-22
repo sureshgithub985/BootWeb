@@ -37,12 +37,11 @@ public class UprofileDAOImpl implements UprofileDAO {
 		log.debug(" Update UserProfile DAO ");
 
 		UProfile uprofileId = profileIdExistsCheck(uprofile.getId(), 1);
-		if (uprofile.getName() != null && !uprofileId.getName().equals(uprofile.getName())) {
+		if (uprofileId != null && uprofile.getName() != null && !uprofileId.getName().equals(uprofile.getName())) {
 			profileNameExistsCheck(uprofile.getName());
 			uprofileId.setName(uprofile.getName());
 		}
 
-		uprofileId.setId(id);
 		if (uprofile.getAgeoffTimer() != null)
 			uprofileId.setAgeoffTimer(uprofile.getAgeoffTimer());
 		if (uprofile.getRegistrationTimer() != null)
@@ -68,8 +67,6 @@ public class UprofileDAOImpl implements UprofileDAO {
 	private UProfile profileIdExistsCheck(Integer id, int op) {
 
 		Optional<UProfile> opIduprofile = userprofileRepo.findById(id);
-
-		System.out.println(opIduprofile.isPresent()); //NOSONAR
 
 		if (opIduprofile.isPresent() && op == 0)
 			throw new ValidationErrorException(MessageUtil.PROFILE_ID_EXISTS);

@@ -3,9 +3,10 @@ package com.ey.core.web;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,13 +21,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.ey.core.dto.UProfileDTO;
 import com.ey.core.entity.UProfile;
 import com.ey.core.service.UprofileService;
+import com.ey.core.util.MessageUtil;
+import com.ey.core.util.ValidationErrorException;
+import com.ey.core.util.XMLConvertor;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/wave-prov/wave/uprofiles")
+@RequestMapping(value = "/wave-prov/wave/uprofiles", produces = { MediaType.APPLICATION_JSON_VALUE,
+		MediaType.APPLICATION_XML_VALUE })
 @RestController
 public class UProfileController {
 
@@ -36,14 +42,25 @@ public class UProfileController {
 	@Autowired
 	private HttpServletRequest request;
 
+	@Autowired
+	private ModelMapper mapper;
+
+	@Autowired
+	private XMLConvertor xc;
+
+	@Autowired
+	private Environment env;
+
 	@PostMapping
-	public ResponseEntity<Void> createUserProfile(@RequestBody @Valid UProfile uprofile,
+	public ResponseEntity<Void> createUserProfile(@RequestBody UProfileDTO uprofileDTO,
 			UriComponentsBuilder uriBuilder) {
 
 		log.info(" Add UserProfile Controller ");
 
-		HttpHeaders headers = addHeaders(request);
+		String contentType = addDefaulContentType(request);
+		HttpHeaders headers = addHeaders(contentType);
 
+		UProfile uprofile = dtoToEntityConversion(uprofileDTO);
 		uprofileService.addUserProfile(uprofile);
 
 		headers.setLocation(uriBuilder.path("/wave-prov/wave/uprofiles/{id}").buildAndExpand(uprofile.getId()).toUri());
@@ -52,25 +69,46 @@ public class UProfileController {
 
 	}
 
-	private HttpHeaders addHeaders(HttpServletRequest request) {
+	private UProfile dtoToEntityConversion(UProfileDTO uprofileDTO) {
 
-		String contentValue = request.getContentType();
+		UProfile uprofile = mapper.map(uprofileDTO, UProfile.class);
+		if (uprofile == null)
+			throw new ValidationErrorException(MessageUtil.MODEL_MAPPER_CONVERSION_FAILED);
+
+		return uprofile;
+	}
+
+	private UProfileDTO entityToDTOConversion(UProfile uprofile) {
+
+		UProfileDTO uprofileDto = mapper.map(uprofile, UProfileDTO.class);
+		if (uprofile == null)
+			throw new ValidationErrorException(MessageUtil.MODEL_MAPPER_CONVERSION_FAILED);
+
+		return uprofileDto;
+	}
+
+	private HttpHeaders addHeaders(String contentValue) {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", contentValue);
-		if (contentValue.equals("application/xml"))
+
+		if (contentValue.equals(MediaType.APPLICATION_XML_VALUE))
 			headers.setContentType(MediaType.APPLICATION_XML);
-		else
+		else {
+			System.out.println("going in else condiation");
 			headers.setContentType(MediaType.APPLICATION_JSON);
+		}
 
 		return headers;
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> updateUserProfile(@RequestBody @Valid UProfile uprofile,
+	public ResponseEntity<Void> updateUserProfile(@RequestBody UProfileDTO uprofileDTO,
 			@PathVariable("id") Integer id) {
 
-		HttpHeaders headers = addHeaders(request);
+		String contentType = addDefaulContentType(request);
+		HttpHeaders headers = addHeaders(contentType);
+
+		UProfile uprofile = dtoToEntityConversion(uprofileDTO);
 
 		uprofileService.updateUserProfile(uprofile, id);
 
@@ -79,14 +117,38 @@ public class UProfileController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<UProfile>> getAllUserProfiles() {
+	public ResponseEntity<Object> getAllUserProfiles() {
 
-		HttpHeaders headers = addHeaders(request);
+		String contentValue = addDefaulContentType(request);
+		HttpHeaders headers = addHeaders(contentValue);
 
 		List<UProfile> upofileList = uprofileService.getAllCustomers();
 
-		return new ResponseEntity<>(upofileList, headers, HttpStatus.OK);
+		System.out.println("upofileList value is " + upofileList);
 
+		if (contentValue.equals(MediaType.APPLICATION_XML_VALUE)) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("<uprofiles>").append("\n").append("<collection>");
+			for (UProfile uprofile : upofileList) {
+				UProfileDTO uprofiledDTO = entityToDTOConversion(uprofile);
+				String outXml = xc.toXml(uprofiledDTO);
+				System.out.println("outXml value is " + outXml);
+				sb.append("\n").append(outXml);
+			}
+			sb.append("</collection>").append("\n").append("</uprofiles>");
+
+			return new ResponseEntity<>(sb.toString(), headers, HttpStatus.OK);
+		} else
+			return new ResponseEntity<>(upofileList, headers, HttpStatus.OK);
+	}
+
+	private String addDefaulContentType(HttpServletRequest request) {
+
+		String contentValue = request.getContentType();
+		if (contentValue == null)
+			contentValue = env.getProperty("default.content.type");
+
+		return contentValue;
 	}
 
 	@DeleteMapping("/{id}")
@@ -94,22 +156,30 @@ public class UProfileController {
 
 		uprofileService.deleteUserProfileById(id);
 
-		HttpHeaders headers = addHeaders(request);
+		String contentType = addDefaulContentType(request);
+		HttpHeaders headers = addHeaders(contentType);
 
 		return new ResponseEntity<>(headers, HttpStatus.OK);
 
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<UProfile> getUserProfile(@PathVariable("id") Integer id) {
+	public ResponseEntity<Object> getUserProfile(@PathVariable("id") Integer id) {
 
 		log.debug(" GET UserProfile Controller ");
 
+		String contentType = addDefaulContentType(request);
+
 		UProfile uprofile = uprofileService.getUserProfile(id);
 
-		HttpHeaders headers = addHeaders(request);
+		HttpHeaders headers = addHeaders(contentType);
 
-		return new ResponseEntity<>(uprofile, headers, HttpStatus.OK);
+		if (contentType.equals(MediaType.APPLICATION_XML_VALUE)) {
+			UProfileDTO uprofiledDTO = entityToDTOConversion(uprofile);
+			String outXml = xc.toXml(uprofiledDTO);
+			return new ResponseEntity<>(outXml, headers, HttpStatus.OK);
+		} else
+			return new ResponseEntity<>(uprofile, headers, HttpStatus.OK);
 
 	}
 
