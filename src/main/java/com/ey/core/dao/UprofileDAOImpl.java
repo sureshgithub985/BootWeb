@@ -69,7 +69,7 @@ public class UprofileDAOImpl implements UprofileDAO {
 
 		Optional<UProfile> opIduprofile = userprofileRepo.findById(id);
 
-		System.out.println(opIduprofile.isPresent());
+		System.out.println(opIduprofile.isPresent()); //NOSONAR
 
 		if (opIduprofile.isPresent() && op == 0)
 			throw new ValidationErrorException(MessageUtil.PROFILE_ID_EXISTS);
