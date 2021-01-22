@@ -52,8 +52,8 @@ public class UprofileDAOImpl implements UprofileDAO {
 			uprofileId.setIsOpenEnterprise(uprofile.getIsOpenEnterprise());
 		if (uprofile.getIsSpoolingEnabled() != null)
 			uprofileId.setIsSpoolingEnabled(uprofile.getIsSpoolingEnabled());
-
-		userprofileRepo.save(uprofileId);
+		if (uprofileId != null)
+			userprofileRepo.save(uprofileId);
 	}
 
 	private void profileNameExistsCheck(String name) {

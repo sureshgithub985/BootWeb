@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -87,14 +88,13 @@ public class UProfileController {
 		return uprofileDto;
 	}
 
-	private HttpHeaders addHeaders(String contentValue) {
+	private HttpHeaders addHeaders(@Nullable String contentValue) {
 
 		HttpHeaders headers = new HttpHeaders();
 
 		if (contentValue.equals(MediaType.APPLICATION_XML_VALUE))
 			headers.setContentType(MediaType.APPLICATION_XML);
 		else {
-			System.out.println("going in else condiation");
 			headers.setContentType(MediaType.APPLICATION_JSON);
 		}
 
@@ -124,18 +124,17 @@ public class UProfileController {
 
 		List<UProfile> upofileList = uprofileService.getAllCustomers();
 
-		System.out.println("upofileList value is " + upofileList);
-
 		if (contentValue.equals(MediaType.APPLICATION_XML_VALUE)) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<uprofiles>").append("\n").append("<collection>");
 			for (UProfile uprofile : upofileList) {
 				UProfileDTO uprofiledDTO = entityToDTOConversion(uprofile);
 				String outXml = xc.toXml(uprofiledDTO);
-				System.out.println("outXml value is " + outXml);
 				sb.append("\n").append(outXml);
 			}
 			sb.append("</collection>").append("\n").append("</uprofiles>");
+
+			headers.add("X-Total-Count", String.valueOf(upofileList.size()));
 
 			return new ResponseEntity<>(sb.toString(), headers, HttpStatus.OK);
 		} else
