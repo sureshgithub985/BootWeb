@@ -19,22 +19,11 @@ public class UProfile implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/*
+	 * <id>1</id>
 	 * <name>Profile1</name> <registration_timer>1800</registration_timer>
 	 * <ageoff_timer>2000</ageoff_timer> <is_console>false</is_console>
 	 * <is_open_enterprise>true</is_open_enterprise>
 	 * <is_spooling_enabled>true</is_spooling_enabled>
-	 * <is_qos_enabled>true</is_qos_enabled>
-	 * <is_mdn_in_min_enabled>true</is_mdn_in_min_enabled>
-	 * <talkburst_limit>20</talkburst_limit> <lte_paging_cycle>1</lte_paging_cycle>
-	 * <floor_revoke_timer>30</floor_revoke_timer>
-	 * <target_wakeup_throttle_timer>100</target_wakeup_throttle_timer>
-	 * <signaling_reservation_priority>13</signaling_reservation_priority>
-	 * <media_reservation_priority>13</media_reservation_priority>
-	 * <call_setup_priority>1</call_setup_priority>
-	 * <is_call_setup_preemption_enabled>true</is_call_setup_preemption_enabled>
-	 * <floor_priority>1</floor_priority>
-	 * <is_floor_preemption_enabled>true</is_floor_preemption_enabled>
-	 * <emergency_floor_revoke_timer>60</emergency_floor_revoke_timer>
 	 */
 
 	@Id
@@ -56,6 +45,9 @@ public class UProfile implements Serializable {
 
 	@Column(name = "is_spooling_enabled")
 	private Boolean isSpoolingEnabled;
+
+	@Column(name = "is_open_enterprise")
+	private Boolean isOpenEnterprise;
 
 	public Integer getId() {
 		return id;
@@ -105,10 +97,19 @@ public class UProfile implements Serializable {
 		this.isSpoolingEnabled = isSpoolingEnabled;
 	}
 
+	public Boolean getIsOpenEnterprise() {
+		return isOpenEnterprise;
+	}
+
+	public void setIsOpenEnterprise(Boolean isOpenEnterprise) {
+		this.isOpenEnterprise = isOpenEnterprise;
+	}
+
 	@Override
 	public String toString() {
 		return "UProfile [id=" + id + ", name=" + name + ", registrationTimer=" + registrationTimer + ", ageoffTimer="
-				+ ageoffTimer + ", isConsole=" + isConsole + ", isSpoolingEnabled=" + isSpoolingEnabled + "]";
+				+ ageoffTimer + ", isConsole=" + isConsole + ", isSpoolingEnabled=" + isSpoolingEnabled
+				+ ", isOpenEnterprise=" + isOpenEnterprise + "]";
 	}
 
 }

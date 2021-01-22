@@ -1,12 +1,10 @@
 package com.ey.core.web;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,16 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ey.core.dto.CustomerDTO;
-import com.ey.core.entity.Customer;
 import com.ey.core.entity.UProfile;
-import com.ey.core.service.CustomerService;
 import com.ey.core.service.UprofileService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/wave-prov/wave")
+@RequestMapping("/wave-prov/wave/uprofiles")
 @RestController
 public class UProfileController {
 
@@ -39,21 +34,15 @@ public class UProfileController {
 	private UprofileService uprofileService;
 
 	@Autowired
-	private ModelMapper modelMapper;
-
-	@Autowired
 	private HttpServletRequest request;
 
-	@PostMapping("/uprofiles")
+	@PostMapping
 	public ResponseEntity<Void> createUserProfile(@RequestBody @Valid UProfile uprofile,
 			UriComponentsBuilder uriBuilder) {
 
-		String contentValue = request.getContentType();
+		log.info(" Add UserProfile Controller ");
 
-		log.info("Add Customer Controller " + contentValue);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", contentValue);
+		HttpHeaders headers = addHeaders(request);
 
 		uprofileService.addUserProfile(uprofile);
 
@@ -63,14 +52,25 @@ public class UProfileController {
 
 	}
 
-	@PutMapping("/uprofiles/{id}")
+	private HttpHeaders addHeaders(HttpServletRequest request) {
+
+		String contentValue = request.getContentType();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", contentValue);
+		if (contentValue.equals("application/xml"))
+			headers.setContentType(MediaType.APPLICATION_XML);
+		else
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+		return headers;
+	}
+
+	@PutMapping("/{id}")
 	public ResponseEntity<Void> updateUserProfile(@RequestBody @Valid UProfile uprofile,
 			@PathVariable("id") Integer id) {
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		// Customer cust = modelMapper.map(custDTO, Customer.class);
+		HttpHeaders headers = addHeaders(request);
 
 		uprofileService.updateUserProfile(uprofile, id);
 
@@ -78,39 +78,36 @@ public class UProfileController {
 
 	}
 
-	@GetMapping("/uprofiles")
+	@GetMapping
 	public ResponseEntity<List<UProfile>> getAllUserProfiles() {
 
-		List<UProfile> upofileList = uprofileService.getAllCustomers();
+		HttpHeaders headers = addHeaders(request);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		List<UProfile> upofileList = uprofileService.getAllCustomers();
 
 		return new ResponseEntity<>(upofileList, headers, HttpStatus.OK);
 
 	}
 
-	@DeleteMapping("/uprofiles/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteUserProfileById(@PathVariable("id") Integer id) {
 
 		uprofileService.deleteUserProfileById(id);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = addHeaders(request);
 
 		return new ResponseEntity<>(headers, HttpStatus.OK);
 
 	}
 
-	@GetMapping("/uprofiles/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<UProfile> getUserProfile(@PathVariable("id") Integer id) {
+
+		log.debug(" GET UserProfile Controller ");
 
 		UProfile uprofile = uprofileService.getUserProfile(id);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		System.out.println("uprofile value is " + uprofile);
+		HttpHeaders headers = addHeaders(request);
 
 		return new ResponseEntity<>(uprofile, headers, HttpStatus.OK);
 

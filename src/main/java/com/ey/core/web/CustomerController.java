@@ -29,7 +29,7 @@ import com.ey.core.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/wave-prov/wave")
+@RequestMapping("/wave-prov/wave/customers")
 @Controller
 public class CustomerController {
 
@@ -42,7 +42,7 @@ public class CustomerController {
 	@Autowired
 	private HttpServletRequest request;
 
-	@PostMapping("/customers")
+	@PostMapping
 	public ResponseEntity<Void> createCustomer(@RequestBody @Valid CustomerDTO custDTO,
 			UriComponentsBuilder uriBuilder) {
 
@@ -66,7 +66,7 @@ public class CustomerController {
 
 	}
 
-	@PutMapping("/customers/{email}")
+	@PutMapping("/{email}")
 	public ResponseEntity<Void> updateCustomer(@RequestBody @Valid CustomerDTO custDTO,
 			@PathVariable("email") String email) {
 
@@ -86,7 +86,7 @@ public class CustomerController {
 
 	}
 
-	@GetMapping("/customers")
+	@GetMapping
 	public ResponseEntity<List<Customer>> getAllCustomers() {
 
 		List<Customer> custList = custService.getAllCustomers();
@@ -98,7 +98,7 @@ public class CustomerController {
 
 	}
 
-	@DeleteMapping("/customers/{email}")
+	@DeleteMapping("/{email}")
 	public ResponseEntity<Void> deleteCustomerByEmail(@PathVariable("email") String email) {
 
 		custService.deleteCustomerByEmail(email);
@@ -110,7 +110,7 @@ public class CustomerController {
 
 	}
 
-	@GetMapping("/customers/{email}")
+	@GetMapping("/{email}")
 	public ResponseEntity<Customer> getCustomer(@PathVariable("email") String email) {
 
 		Customer cust = custService.getCustomerByEmail(email);

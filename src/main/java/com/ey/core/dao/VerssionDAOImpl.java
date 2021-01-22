@@ -18,7 +18,7 @@ public class VerssionDAOImpl implements VerssionDAO {
 
 		List<Version> versionList = versionRepository.findAll();
 
-		if (versionList.size() != 0 && versionList.size() == 1) {
+		if (!versionList.isEmpty() && versionList.size() == 1) {
 			return versionList.get(0);
 		} else
 			return null;

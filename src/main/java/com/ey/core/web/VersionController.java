@@ -15,14 +15,14 @@ import com.ey.core.entity.Version;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/wave-prov/wave")
+@RequestMapping("/wave-prov/wave/version")
 @RestController
 public class VersionController {
 
 	@Autowired
 	private VerssionDAO versionDao;
 
-	@GetMapping("/version")
+	@GetMapping
 	public ResponseEntity<Object> getVersion() {
 		log.debug(" GET Verison Controller ");
 		Version version = versionDao.getversion();

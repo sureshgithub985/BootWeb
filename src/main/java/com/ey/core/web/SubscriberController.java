@@ -23,14 +23,14 @@ import com.ey.core.service.SubscriberService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/wave-prov/wave")
+@RequestMapping("/wave-prov/wave/subscribers")
 @Controller
 public class SubscriberController {
 
 	@Autowired
 	private SubscriberService subServie;
 
-	@PostMapping("/subscribers")
+	@PostMapping
 	public ResponseEntity<Void> createSubscriber(@RequestBody Subscriber sub, UriComponentsBuilder uriBuilder) {
 		log.debug("Create Subscriber Controller ");
 
@@ -49,7 +49,7 @@ public class SubscriberController {
 		}
 	}
 
-	@GetMapping("/subscribers")
+	@GetMapping
 	public ResponseEntity<List<Subscriber>> getAllSubscribers() {
 
 		log.debug(" GETALL Subscribers Controller ");
@@ -63,7 +63,7 @@ public class SubscriberController {
 
 	}
 
-	@GetMapping("/subscribers/{mdn}")
+	@GetMapping("/{mdn}")
 	public ResponseEntity<Subscriber> findBySubscriber(@PathVariable("mdn") Long mdn) {
 
 		log.debug(" GET Subscriber Controller ");
@@ -76,7 +76,7 @@ public class SubscriberController {
 
 	}
 
-	@DeleteMapping("/subscribers/{mdn}")
+	@DeleteMapping("/{mdn}")
 	public ResponseEntity<Subscriber> deleteSubscriber(@PathVariable("mdn") Long mdn) {
 
 		log.debug(" Delete Subscriber Controller ");
@@ -90,7 +90,7 @@ public class SubscriberController {
 
 	}
 
-	@PutMapping("/subscribers/{name}")
+	@PutMapping("/{mdn}")
 	public ResponseEntity<Void> updateEntGroup(@RequestBody Subscriber sub, @PathVariable("mdn") Long mdn) {
 
 		log.debug(" Update Subscriber Controller ");

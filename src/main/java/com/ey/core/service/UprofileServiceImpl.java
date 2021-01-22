@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.ey.core.dao.UprofileDAO;
 import com.ey.core.entity.UProfile;
+import com.ey.core.util.MessageUtil;
+import com.ey.core.util.ValidationErrorException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,12 +22,23 @@ public class UprofileServiceImpl implements UprofileService {
 	@Override
 	public void addUserProfile(UProfile uprofile) {
 		log.debug(" Add UserProfile Service ");
+
+		ageoffTimerValidation(uprofile.getAgeoffTimer(), uprofile.getRegistrationTimer());
 		uprofileDAO.save(uprofile);
+	}
+
+	private void ageoffTimerValidation(Integer ageoffTimer, Integer registrationTimer) {
+
+		if (ageoffTimer < registrationTimer)
+			throw new ValidationErrorException(MessageUtil.AGE_TIMER_GRATER_MSG);
+
 	}
 
 	@Override
 	public void updateUserProfile(UProfile uprofile, Integer id) {
 		log.debug(" Update UserProfile Service ");
+
+		ageoffTimerValidation(uprofile.getAgeoffTimer(), uprofile.getRegistrationTimer());
 		uprofileDAO.update(uprofile, id);
 
 	}

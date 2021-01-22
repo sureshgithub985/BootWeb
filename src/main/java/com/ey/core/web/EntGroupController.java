@@ -23,14 +23,14 @@ import com.ey.core.service.EntGroupService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/wave-prov/wave")
+@RequestMapping("/wave-prov/wave/egroups")
 @Controller
 public class EntGroupController {
 
 	@Autowired
 	private EntGroupService entGroupService;
 
-	@PostMapping("/egroups")
+	@PostMapping
 	public ResponseEntity<Void> createEntGroup(@RequestBody EntGroup egroup, UriComponentsBuilder uriBuilder) {
 		log.debug(" Create EnterpriseGroup Controller ");
 
@@ -50,7 +50,7 @@ public class EntGroupController {
 
 	}
 
-	@GetMapping("/egroups")
+	@GetMapping
 	public ResponseEntity<List<EntGroup>> getAllEntgroups() {
 
 		log.debug(" GETALL EnterpriseGroup Controller ");
@@ -63,7 +63,7 @@ public class EntGroupController {
 
 	}
 
-	@GetMapping("/egroups/{name}")
+	@GetMapping("/{name}")
 	public ResponseEntity<EntGroup> findByEntGroup(@PathVariable("name") String name) {
 
 		log.debug(" GET EntGroup Controller ");
@@ -76,7 +76,7 @@ public class EntGroupController {
 
 	}
 
-	@DeleteMapping("/egroups/{name}")
+	@DeleteMapping("/{name}")
 	public ResponseEntity<EntGroup> deleteByEntGroup(@PathVariable("name") String name) {
 
 		log.debug(" Delete EntGroup Controller ");
@@ -90,7 +90,7 @@ public class EntGroupController {
 
 	}
 
-	@PutMapping("/egroups/{name}")
+	@PutMapping("/{name}")
 	public ResponseEntity<Void> updateEntGroup(@RequestBody EntGroup entGroup, @PathVariable("name") String name) {
 
 		log.debug(" Update EntGroup Controller ");

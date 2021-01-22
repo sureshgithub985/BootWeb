@@ -29,7 +29,7 @@ import com.ey.core.util.XMLConvertor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping(value = "/wave-prov/wave")
+@RequestMapping(value = "/wave-prov/wave/gprofiles")
 @RestController
 public class GTProfileController {
 
@@ -45,7 +45,7 @@ public class GTProfileController {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@PostMapping(value = "/gprofiles", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<Void> createGroupProfile(@RequestBody GTProfileDTO gtprofile,
 			UriComponentsBuilder uriBuilder) {
 
@@ -78,7 +78,7 @@ public class GTProfileController {
 		return headers;
 	}
 
-	@GetMapping(value = "/gprofiles", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<Object> getAllGTProfiles() {
 
 		List<GTProfile> gprofileList = gtprofileService.getAllGprofiles();
@@ -111,8 +111,7 @@ public class GTProfileController {
 
 	}
 
-	@GetMapping(value = "/gprofiles/{id}", produces = { MediaType.APPLICATION_XML_VALUE,
-			MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<Object> getCustomer(@PathVariable("id") int id) {
 
 		GTProfile gprofile = gtprofileService.getGprofileById(id);
@@ -130,8 +129,7 @@ public class GTProfileController {
 
 	}
 
-	@DeleteMapping(value = "/gprofiles/{id}", produces = { MediaType.APPLICATION_XML_VALUE,
-			MediaType.APPLICATION_JSON_VALUE })
+	@DeleteMapping(value = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<GTProfile> deleteGroupProfile(@PathVariable("id") Integer id) {
 
 		log.debug(" Delete GTProfile Controller ");
@@ -148,8 +146,7 @@ public class GTProfileController {
 
 	}
 
-	@PutMapping(value = "/gprofiles/{id}", produces = { MediaType.APPLICATION_XML_VALUE,
-			MediaType.APPLICATION_JSON_VALUE })
+	@PutMapping(value = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<Void> updateEnterprise(@RequestBody GTProfileDTO gprofileDTO,
 			@PathVariable("id") Integer id) {
 
