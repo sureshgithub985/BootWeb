@@ -4,8 +4,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.ey.core.entity.PageCycle;
+
 @XmlType(propOrder = { "id", "name", "registrationTimer", "ageoffTimer", "isConsole", "isSpoolingEnabled",
-		"isOpenEnterprise" })
+		"isOpenEnterprise", "ltePagingCycle" })
 @XmlRootElement(name = "uprofile")
 public class UProfileDTO {
 
@@ -16,6 +18,7 @@ public class UProfileDTO {
 	private Boolean isConsole;
 	private Boolean isSpoolingEnabled;
 	private Boolean isOpenEnterprise;
+	private PageCycle ltePagingCycle;
 
 	@XmlElement(name = "id")
 	public Integer getId() {
@@ -78,6 +81,15 @@ public class UProfileDTO {
 
 	public void setIsOpenEnterprise(Boolean isOpenEnterprise) {
 		this.isOpenEnterprise = isOpenEnterprise;
+	}
+
+	@XmlElement(name = "ltePagingCycle")
+	public PageCycle getLtePagingCycle() {
+		return ltePagingCycle;
+	}
+
+	public void setLtePagingCycle(PageCycle ltePagingCycle) {
+		this.ltePagingCycle = ltePagingCycle;
 	}
 
 }

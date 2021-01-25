@@ -28,6 +28,8 @@ public class UprofileDAOImpl implements UprofileDAO {
 
 		profileIdExistsCheck(uprofile.getId(), 0);
 		profileNameExistsCheck(uprofile.getName());
+		
+		System.out.println("uprofile lte page cycle value is "+uprofile.getLtePagingCycle());
 
 		userprofileRepo.save(uprofile);
 	}

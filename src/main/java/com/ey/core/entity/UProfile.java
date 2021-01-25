@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
 @Table(name = "wms_user_profile")
@@ -19,8 +21,8 @@ public class UProfile implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/*
-	 * <id>1</id>
-	 * <name>Profile1</name> <registration_timer>1800</registration_timer>
+	 * <id>1</id> <name>Profile1</name>
+	 * <registration_timer>1800</registration_timer>
 	 * <ageoff_timer>2000</ageoff_timer> <is_console>false</is_console>
 	 * <is_open_enterprise>true</is_open_enterprise>
 	 * <is_spooling_enabled>true</is_spooling_enabled>
@@ -48,6 +50,10 @@ public class UProfile implements Serializable {
 
 	@Column(name = "is_open_enterprise")
 	private Boolean isOpenEnterprise;
+
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name="lte_paging_cycle")
+	private PageCycle ltePagingCycle;
 
 	public Integer getId() {
 		return id;
@@ -105,11 +111,19 @@ public class UProfile implements Serializable {
 		this.isOpenEnterprise = isOpenEnterprise;
 	}
 
+	public PageCycle getLtePagingCycle() {
+		return ltePagingCycle;
+	}
+
+	public void setLtePagingCycle(PageCycle ltePagingCycle) {
+		this.ltePagingCycle = ltePagingCycle;
+	}
+
 	@Override
 	public String toString() {
 		return "UProfile [id=" + id + ", name=" + name + ", registrationTimer=" + registrationTimer + ", ageoffTimer="
 				+ ageoffTimer + ", isConsole=" + isConsole + ", isSpoolingEnabled=" + isSpoolingEnabled
-				+ ", isOpenEnterprise=" + isOpenEnterprise + "]";
+				+ ", isOpenEnterprise=" + isOpenEnterprise + ", ltePagingCycle=" + ltePagingCycle + "]";
 	}
 
 }

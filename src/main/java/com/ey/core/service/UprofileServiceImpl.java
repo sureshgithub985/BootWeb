@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ey.core.dao.UprofileDAO;
+import com.ey.core.entity.PageCycle;
 import com.ey.core.entity.UProfile;
 import com.ey.core.util.MessageUtil;
 import com.ey.core.util.ValidationErrorException;
@@ -22,6 +23,19 @@ public class UprofileServiceImpl implements UprofileService {
 	@Override
 	public void addUserProfile(UProfile uprofile) {
 		log.debug(" Add UserProfile Service ");
+
+		if (uprofile.getAgeoffTimer() == null)
+			uprofile.setAgeoffTimer(3630);
+		if (uprofile.getRegistrationTimer() == null)
+			uprofile.setRegistrationTimer(3600);
+		if (uprofile.getIsOpenEnterprise() == null)
+			uprofile.setIsOpenEnterprise(true);
+		if (uprofile.getIsConsole() == null)
+			uprofile.setIsConsole(true);
+		if (uprofile.getIsSpoolingEnabled() == null)
+			uprofile.setIsSpoolingEnabled(true);
+		if(uprofile.getLtePagingCycle() == null)
+			uprofile.setLtePagingCycle(PageCycle.REDUCED2);
 
 		ageoffTimerValidation(uprofile.getAgeoffTimer(), uprofile.getRegistrationTimer());
 		uprofileDAO.save(uprofile);
