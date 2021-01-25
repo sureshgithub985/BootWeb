@@ -37,23 +37,25 @@ public class UprofileDAOImpl implements UprofileDAO {
 		log.debug(" Update UserProfile DAO ");
 
 		UProfile uprofileId = profileIdExistsCheck(uprofile.getId(), 1);
-		if (uprofileId != null && uprofile.getName() != null && !uprofileId.getName().equals(uprofile.getName())) {
-			profileNameExistsCheck(uprofile.getName());
-			uprofileId.setName(uprofile.getName());
-		}
+		if (uprofileId != null) {
+			if (uprofile.getName() != null && !uprofileId.getName().equals(uprofile.getName())) {
+				profileNameExistsCheck(uprofile.getName());
+				uprofileId.setName(uprofile.getName());
+			}
 
-		if (uprofile.getAgeoffTimer() != null)
-			uprofileId.setAgeoffTimer(uprofile.getAgeoffTimer());
-		if (uprofile.getRegistrationTimer() != null)
-			uprofileId.setRegistrationTimer(uprofile.getRegistrationTimer());
-		if (uprofile.getIsConsole() != null)
-			uprofileId.setIsConsole(uprofile.getIsConsole());
-		if (uprofile.getIsOpenEnterprise() != null)
-			uprofileId.setIsOpenEnterprise(uprofile.getIsOpenEnterprise());
-		if (uprofile.getIsSpoolingEnabled() != null)
-			uprofileId.setIsSpoolingEnabled(uprofile.getIsSpoolingEnabled());
-		if (uprofileId != null)
+			if (uprofile.getAgeoffTimer() != null)
+				uprofileId.setAgeoffTimer(uprofile.getAgeoffTimer());
+			if (uprofile.getRegistrationTimer() != null)
+				uprofileId.setRegistrationTimer(uprofile.getRegistrationTimer());
+			if (uprofile.getIsConsole() != null)
+				uprofileId.setIsConsole(uprofile.getIsConsole());
+			if (uprofile.getIsOpenEnterprise() != null)
+				uprofileId.setIsOpenEnterprise(uprofile.getIsOpenEnterprise());
+			if (uprofile.getIsSpoolingEnabled() != null)
+				uprofileId.setIsSpoolingEnabled(uprofile.getIsSpoolingEnabled());
+
 			userprofileRepo.save(uprofileId);
+		}
 	}
 
 	private void profileNameExistsCheck(String name) {

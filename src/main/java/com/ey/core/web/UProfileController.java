@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,7 +57,10 @@ public class UProfileController {
 
 		log.info(" Add UserProfile Controller ");
 
-		String contentType = addDefaulContentType(request);
+		String contentType = request.getContentType();
+		if (contentType == null)
+			contentType = "application/json";
+
 		HttpHeaders headers = addHeaders(contentType);
 
 		UProfile uprofile = dtoToEntityConversion(uprofileDTO);
@@ -88,7 +90,7 @@ public class UProfileController {
 		return uprofileDto;
 	}
 
-	private HttpHeaders addHeaders(@Nullable String contentValue) {
+	private HttpHeaders addHeaders(String contentValue) {
 
 		HttpHeaders headers = new HttpHeaders();
 
@@ -105,7 +107,10 @@ public class UProfileController {
 	public ResponseEntity<Void> updateUserProfile(@RequestBody UProfileDTO uprofileDTO,
 			@PathVariable("id") Integer id) {
 
-		String contentType = addDefaulContentType(request);
+		String contentType = request.getContentType();
+		if (contentType == null)
+			contentType = "application/json";
+
 		HttpHeaders headers = addHeaders(contentType);
 
 		UProfile uprofile = dtoToEntityConversion(uprofileDTO);
@@ -119,12 +124,15 @@ public class UProfileController {
 	@GetMapping
 	public ResponseEntity<Object> getAllUserProfiles() {
 
-		String contentValue = addDefaulContentType(request);
-		HttpHeaders headers = addHeaders(contentValue);
+		String contentType = request.getContentType();
+		if (contentType == null)
+			contentType = "application/json";
+
+		HttpHeaders headers = addHeaders(contentType);
 
 		List<UProfile> upofileList = uprofileService.getAllCustomers();
 
-		if (contentValue.equals(MediaType.APPLICATION_XML_VALUE)) {
+		if (contentType.equals(MediaType.APPLICATION_XML_VALUE)) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<uprofiles>").append("\n").append("<collection>");
 			for (UProfile uprofile : upofileList) {
@@ -141,7 +149,7 @@ public class UProfileController {
 			return new ResponseEntity<>(upofileList, headers, HttpStatus.OK);
 	}
 
-	private String addDefaulContentType(@Nullable HttpServletRequest request) {
+	private String addDefaulContentType(HttpServletRequest request) {
 
 		String contentValue = request.getContentType();
 		if (contentValue == null)
@@ -167,7 +175,9 @@ public class UProfileController {
 
 		log.debug(" GET UserProfile Controller ");
 
-		String contentType = addDefaulContentType(request);
+		String contentType = request.getContentType();
+		if (contentType == null)
+			contentType = "application/json";
 
 		UProfile uprofile = uprofileService.getUserProfile(id);
 
