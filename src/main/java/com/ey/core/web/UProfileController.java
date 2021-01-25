@@ -59,7 +59,7 @@ public class UProfileController {
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = "application/json";
+			contentType = MediaType.APPLICATION_JSON_VALUE;
 
 		HttpHeaders headers = addHeaders(contentType);
 
@@ -109,7 +109,7 @@ public class UProfileController {
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = "application/json";
+			contentType = MediaType.APPLICATION_JSON_VALUE;
 
 		HttpHeaders headers = addHeaders(contentType);
 
@@ -126,7 +126,7 @@ public class UProfileController {
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = "application/json";
+			contentType = MediaType.APPLICATION_JSON_VALUE;
 
 		HttpHeaders headers = addHeaders(contentType);
 
@@ -149,21 +149,15 @@ public class UProfileController {
 			return new ResponseEntity<>(upofileList, headers, HttpStatus.OK);
 	}
 
-	private String addDefaulContentType(HttpServletRequest request) {
-
-		String contentValue = request.getContentType();
-		if (contentValue == null)
-			contentValue = env.getProperty("default.content.type");
-
-		return contentValue;
-	}
-
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteUserProfileById(@PathVariable("id") Integer id) {
 
 		uprofileService.deleteUserProfileById(id);
 
-		String contentType = addDefaulContentType(request);
+		String contentType = request.getContentType();
+		if (contentType == null)
+			contentType = MediaType.APPLICATION_JSON_VALUE;
+
 		HttpHeaders headers = addHeaders(contentType);
 
 		return new ResponseEntity<>(headers, HttpStatus.OK);
@@ -177,7 +171,7 @@ public class UProfileController {
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = "application/json";
+			contentType = MediaType.APPLICATION_JSON_VALUE;
 
 		UProfile uprofile = uprofileService.getUserProfile(id);
 
