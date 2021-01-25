@@ -141,7 +141,7 @@ public class UProfileController {
 			return new ResponseEntity<>(upofileList, headers, HttpStatus.OK);
 	}
 
-	private String addDefaulContentType(HttpServletRequest request) {
+	private String addDefaulContentType(@Nullable HttpServletRequest request) {
 
 		String contentValue = request.getContentType();
 		if (contentValue == null)

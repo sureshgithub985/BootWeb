@@ -15,18 +15,7 @@ import javax.persistence.Id;
 @Entity
 public class UProfile implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
-	/*
-	 * <id>1</id> <name>Profile1</name>
-	 * <registration_timer>1800</registration_timer>
-	 * <ageoff_timer>2000</ageoff_timer> <is_console>false</is_console>
-	 * <is_open_enterprise>true</is_open_enterprise>
-	 * <is_spooling_enabled>true</is_spooling_enabled>
-	 */
 
 	@Id
 	@Column(name = "id")
@@ -52,7 +41,7 @@ public class UProfile implements Serializable {
 	private Boolean isOpenEnterprise;
 
 	@Enumerated(EnumType.ORDINAL)
-	@Column(name="lte_paging_cycle")
+	@Column(name = "lte_paging_cycle")
 	private PageCycle ltePagingCycle;
 
 	public Integer getId() {
