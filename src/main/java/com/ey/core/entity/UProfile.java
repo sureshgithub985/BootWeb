@@ -2,6 +2,9 @@ package com.ey.core.entity;
 
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
 
@@ -18,16 +21,20 @@ public class UProfile implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Range(min = 1, max = 16000)
 	@Column(name = "id")
 	private Integer id;
 
+	@Size(min = 1, max = 24)
 	@NotNull
 	@Column(name = "name", unique = true)
 	private String name;
 
+	@Range(min = 60, max = 86400)
 	@Column(name = "registration_timer")
 	private Integer registrationTimer;
 
+	@Range(min = 60, max = 86400)
 	@Column(name = "ageoff_timer")
 	private Integer ageoffTimer;
 
