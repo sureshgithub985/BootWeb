@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ey.core.entity.UProfile;
 import com.ey.core.util.MessageUtil;
@@ -14,7 +14,6 @@ import com.ey.core.util.ValidationErrorException;
 
 import lombok.extern.slf4j.Slf4j;
 
-//@Transactional
 @Repository
 @Slf4j
 public class UprofileDAOImpl implements UprofileDAO {
@@ -88,11 +87,11 @@ public class UprofileDAOImpl implements UprofileDAO {
 	}
 
 	@Override
-	public List<UProfile> getAll() {
+	public List<UProfile> getAll(Pageable pageable) {
 
 		log.debug(" GetAll UserProfile DAO ");
 
-		return userprofileRepo.findAll();
+		return userprofileRepo.findAll(pageable).getContent();
 	}
 
 	@Override

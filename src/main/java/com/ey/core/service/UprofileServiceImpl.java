@@ -2,9 +2,8 @@ package com.ey.core.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ey.core.dao.UprofileDAO;
@@ -36,7 +35,7 @@ public class UprofileServiceImpl implements UprofileService {
 			uprofile.setIsConsole(true);
 		if (uprofile.getIsSpoolingEnabled() == null)
 			uprofile.setIsSpoolingEnabled(true);
-		if(uprofile.getLtePagingCycle() == null)
+		if (uprofile.getLtePagingCycle() == null)
 			uprofile.setLtePagingCycle(PageCycle.REDUCED2);
 
 		ageoffTimerValidation(uprofile.getAgeoffTimer(), uprofile.getRegistrationTimer());
@@ -72,9 +71,9 @@ public class UprofileServiceImpl implements UprofileService {
 	}
 
 	@Override
-	public List<UProfile> getAllCustomers() {
+	public List<UProfile> getAllCustomers(Pageable pageable) {
 		log.debug(" GetAll UserProfile Service ");
-		return uprofileDAO.getAll();
+		return uprofileDAO.getAll(pageable);
 	}
 
 }

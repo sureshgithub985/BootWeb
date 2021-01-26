@@ -2,6 +2,8 @@ package com.ey.core.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import com.ey.core.entity.UProfile;
 
 public interface UprofileDAO {
@@ -12,7 +14,7 @@ public interface UprofileDAO {
 
 	UProfile get(Integer id);
 
-	List<UProfile> getAll();
+	List<UProfile> getAll(Pageable pageable);
 
 	void delete(Integer id);
 

@@ -25,6 +25,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	public static final String MESSAGE_AND_ERROR_CLOSE = "</message>\n" + "</error>";
 	public static final String ERROR_TYPE = "error-type";
 	public static final String MESSAGE = "message";
+	public static final String CONTENT_TYPE = "Content-Type";
 
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<Object> handleExceptionHandler(Exception ex, HttpServletRequest request) {
@@ -34,7 +35,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		if (contentType == null)
 			contentType = "application/json";
 
-		headers.add("Content-Type", contentType);
+		headers.add(CONTENT_TYPE, contentType);
 
 		if (ex instanceof ConstraintViolationException || ex instanceof ValidationErrorException) {
 
@@ -71,11 +72,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		String contentType = request.getHeader("Content-Type");
+		String contentType = request.getHeader(CONTENT_TYPE);
 		if (contentType == null)
 			contentType = "application/json";
 
-		headers.add("Content-Type", contentType);
+		headers.add(CONTENT_TYPE, contentType);
 
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put(ERROR_TYPE, "ValidationError");
