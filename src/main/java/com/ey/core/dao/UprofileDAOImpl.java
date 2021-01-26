@@ -14,7 +14,7 @@ import com.ey.core.util.ValidationErrorException;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Transactional
+//@Transactional
 @Repository
 @Slf4j
 public class UprofileDAOImpl implements UprofileDAO {

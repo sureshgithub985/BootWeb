@@ -7,8 +7,10 @@ import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.ey.core.util.ResourceNotFoundException;
@@ -62,6 +64,23 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 		} else
 			return new ResponseEntity<>(ex.getMessage(), headers, HttpStatus.INTERNAL_SERVER_ERROR);
+
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		String contentType = request.getHeader("Content-Type");
+		if (contentType == null)
+			contentType = "application/json";
+
+		headers.add("Content-Type", contentType);
+
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put(ERROR_TYPE, "ValidationError");
+		jsonObj.put(MESSAGE, ex.getMessage());
+		return new ResponseEntity<>(jsonObj.toString(), headers, HttpStatus.BAD_REQUEST);
 
 	}
 

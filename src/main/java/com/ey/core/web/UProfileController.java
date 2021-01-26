@@ -3,6 +3,7 @@ package com.ey.core.web;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,15 +52,15 @@ public class UProfileController {
 	@Autowired
 	private Environment env;
 
-	@PostMapping
-	public ResponseEntity<Void> createUserProfile(@RequestBody UProfileDTO uprofileDTO,
+	@PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<Void> createUserProfile(@RequestBody  UProfileDTO uprofileDTO,
 			UriComponentsBuilder uriBuilder) {
 
 		log.info(" Add UserProfile Controller ");
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = MediaType.APPLICATION_JSON_VALUE;
+			contentType = env.getProperty("default.content.type");
 
 		HttpHeaders headers = addHeaders(contentType);
 
@@ -109,7 +110,7 @@ public class UProfileController {
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = MediaType.APPLICATION_JSON_VALUE;
+			contentType = env.getProperty("default.content.type");
 
 		HttpHeaders headers = addHeaders(contentType);
 
@@ -126,7 +127,7 @@ public class UProfileController {
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = MediaType.APPLICATION_JSON_VALUE;
+			contentType = env.getProperty("default.content.type");
 
 		HttpHeaders headers = addHeaders(contentType);
 
@@ -156,7 +157,7 @@ public class UProfileController {
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = MediaType.APPLICATION_JSON_VALUE;
+			contentType = env.getProperty("default.content.type");
 
 		HttpHeaders headers = addHeaders(contentType);
 
@@ -171,7 +172,7 @@ public class UProfileController {
 
 		String contentType = request.getContentType();
 		if (contentType == null)
-			contentType = MediaType.APPLICATION_JSON_VALUE;
+			contentType = env.getProperty("default.content.type");
 
 		UProfile uprofile = uprofileService.getUserProfile(id);
 
