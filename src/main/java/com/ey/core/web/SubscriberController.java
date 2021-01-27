@@ -3,6 +3,8 @@ package com.ey.core.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.ey.core.entity.Subscriber;
@@ -50,11 +53,14 @@ public class SubscriberController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Subscriber>> getAllSubscribers() {
+	public ResponseEntity<List<Subscriber>> getAllSubscribers(
+			@RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
+			@RequestParam(value = "pageSize", defaultValue = "100") int pageSize) {
 
 		log.debug(" GETALL Subscribers Controller ");
 
-		List<Subscriber> subList = subServie.getAllSubscribers();
+		Pageable pageable = PageRequest.of(pageNum, pageSize);
+		List<Subscriber> subList = subServie.getAllSubscribers(pageable);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -91,7 +97,7 @@ public class SubscriberController {
 	}
 
 	@PutMapping("/{mdn}")
-	public ResponseEntity<Void> updateEntGroup(@RequestBody Subscriber sub, @PathVariable("mdn") Long mdn) {
+	public ResponseEntity<Void> updateSubscriber(@RequestBody Subscriber sub, @PathVariable("mdn") Long mdn) {
 
 		log.debug(" Update Subscriber Controller ");
 

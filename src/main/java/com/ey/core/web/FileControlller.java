@@ -22,7 +22,7 @@ import com.ey.core.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequestMapping("/wave-prov/wave/fileupload")
+@RequestMapping("/wave-prov/wave/employess")
 @RestController
 public class FileControlller {
 
@@ -34,7 +34,6 @@ public class FileControlller {
 	public ResponseEntity<Void> uploadDataUsingExternalFile(@RequestBody FileDetails fileDetails) {
 
 		log.debug("going inside the controller..........");
-		System.out.println("file details .... " + fileDetails);
 
 		JSONParser parser = new JSONParser();
 
@@ -50,13 +49,9 @@ public class FileControlller {
 				for (int i = 0; i < 1000; i++) {
 					employeeService.createEmployee(emp);
 				}
-
-				System.out.println("Employee details are... " + emp);
 			});
 
-		} catch (IOException e) {
-			log.debug(e.getMessage());
-		} catch (ParseException e) {
+		} catch (IOException | ParseException e) {
 			log.debug(e.getMessage());
 		}
 

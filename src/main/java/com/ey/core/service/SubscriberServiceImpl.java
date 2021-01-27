@@ -3,6 +3,7 @@ package com.ey.core.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ey.core.dao.SubscriberDAO;
@@ -25,34 +26,31 @@ public class SubscriberServiceImpl implements SubscriberService {
 	}
 
 	@Override
-	public List<Subscriber> getAllSubscribers() {
+	public List<Subscriber> getAllSubscribers(Pageable pageable) {
+		
 		log.debug("Update Subscriber Service ");
-
-		return subDao.getAllSubscribersDAO();
+		return subDao.getAllSubscribersDAO(pageable);
 	}
 
 	@Override
 	public Subscriber getSubscriber(Long mdn) {
 
 		log.debug("GET Subscriber Service ");
-
 		return subDao.getSubscriber(mdn);
 	}
 
 	@Override
-	public Subscriber deleteSubscriber(Long mdn) {
+	public void deleteSubscriber(Long mdn) {
 
 		log.debug("Delete Subscriber Service ");
-
-		return subDao.deleteSubscriber(mdn);
+		subDao.deleteSubscriber(mdn);
 	}
 
 	@Override
-	public Subscriber updateSusbciber(Long mdn, Subscriber sub) {
+	public void updateSusbciber(Long mdn, Subscriber sub) {
 
 		log.debug("Update Subscriber Service ");
-
-		return subDao.updateSubscriber(mdn, sub);
+		subDao.updateSubscriber(mdn, sub);
 	}
 
 }
