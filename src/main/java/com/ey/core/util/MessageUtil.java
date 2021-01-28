@@ -28,5 +28,6 @@ public class MessageUtil {
 	public static final String UFMI_ALREADY_EXISTS = "UFMI already exists";
 	public static final String COS_DOESNOT_EXISTS = "Class of Service does not exist";
 	public static final String SECURE_SUB_CANNOT_BE_ADDED_TO_NONSECURE_ENT = "Secure Subscriber cannot be added to a non-secure Enterprise";
-
+	public static final String SUBSCRIBER_SUSPENDED = "Subscriber is suspended"; 
+	public static final String CANNOT_UPDATE_SUSPENDED_SUBSCRIBER = "Cannot update suspended Subscriber";
 }

@@ -17,9 +17,9 @@ import lombok.Data;
 
 @Data
 @Entity
-@Subselect("select whlr_mdn.mdn,whlr_subscribers_info.min,whlr_subscribers_info.cos,whlr_subscribers_info.email,whlr_subscribers_info.enterprise_name,"
-		+ "whlr_subscribers_info.is_secure,whlr_subscribers_info.suspended,whlr_subscribers_info.ufmi,shared_contacts.user_name from whlr_subscribers_info,"
-		+ " whlr_mdn,shared_contacts where whlr_mdn.id=whlr_subscribers_info.mdn_id and whlr_mdn.id=shared_contacts.mdn_id")
+@Subselect("select whlr_mdn.mdn,whlr_subscribers_info.min,whlr_subscribers_info.cos,whlr_subscribers_info.email,ptt_enterprises_info.name as enterprise_name,whlr_subscribers_info.is_secure,"
+		+ "whlr_subscribers_info.suspended,whlr_subscribers_info.ufmi,shared_contacts.user_name from whlr_subscribers_info, whlr_mdn,shared_contacts,ptt_enterprises_info where "
+		+ "whlr_mdn.id=whlr_subscribers_info.mdn_id and whlr_mdn.id=shared_contacts.mdn_id and ptt_enterprises_info.id=whlr_subscribers_info.enterprise_id")
 public class Subscriber {
 
 	@Id

@@ -1,1 +1,1 @@
-<!--INSERT INTO wms_versions (number, role) VALUES ('2.0', 'primary'); -->
+INSERT INTO wms_versions (number, role) VALUES ('2.0', 'primary');

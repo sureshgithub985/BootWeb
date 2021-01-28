@@ -49,7 +49,7 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 		minDatabaseExistscheck(sub.getMin());
 		ufmiDatabaseExistscheck(sub.getUfmi());
 		cosDatabaseExistscheck(sub.getCos());
-		enterpriseNameDatabaseExistscheck(sub.getEnterpriseName(), sub.getIsSecure());
+		int enterpriseId = enterpriseNameDatabaseExistscheck(sub.getEnterpriseName(), sub.getIsSecure());
 
 		entityManager.createNativeQuery("insert into whlr_mdn(mdn) values (:mdn)").setParameter("mdn", sub.getMdn())
 				.executeUpdate();
@@ -62,9 +62,9 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 				.setParameter("mdn_id", mdn_id).setParameter("user_name", sub.getUserName()).executeUpdate();
 
 		int executeUpdate = entityManager.createNativeQuery(
-				"insert into whlr_subscribers_info(mdn_id, cos, email, enterprise_name, is_secure, min, suspended, ufmi) values (:mdn_id,:cos,:email,:enterprise_name,:is_secure,:min,:suspended,:ufmi)")
+				"insert into whlr_subscribers_info(mdn_id, cos, email, enterprise_id, is_secure, min, suspended, ufmi) values (:mdn_id,:cos,:email,:enterprise_id,:is_secure,:min,:suspended,:ufmi)")
 				.setParameter("mdn_id", mdn_id).setParameter("cos", sub.getCos()).setParameter("email", sub.getEmail())
-				.setParameter("enterprise_name", sub.getEnterpriseName()).setParameter("is_secure", sub.getIsSecure())
+				.setParameter("enterprise_id", enterpriseId).setParameter("is_secure", sub.getIsSecure())
 				.setParameter("min", sub.getMin()).setParameter("suspended", sub.getSuspended())
 				.setParameter("ufmi", sub.getUfmi()).executeUpdate();
 
@@ -72,13 +72,14 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 
 	}
 
-	private void enterpriseNameDatabaseExistscheck(String enterpriseName, Boolean isSecure) {
+	private int enterpriseNameDatabaseExistscheck(String enterpriseName, Boolean isSecure) {
 
 		Enterprise ent = enterpriseDAO.findByEntName(enterpriseName);
 		if (ent != null) {
 			int ckr = ent.getCkr();
 			if (ckr == 0 && isSecure)
 				throw new ValidationErrorException(MessageUtil.SECURE_SUB_CANNOT_BE_ADDED_TO_NONSECURE_ENT);
+			return ent.getId();
 		} else {
 			throw new ValidationErrorException(MessageUtil.ENTERPRISE_NAME_DOESNOT_EXISTS);
 		}
@@ -139,32 +140,70 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 		log.debug(" Update Subscriber DAO ");
 		log.info("Subscriber Suspended value is " + sub.getSuspended());
 
-		Subscriber oldSub = subRepository.findByMdn(mdn);
+		Subscriber oldSub = subscriberExistcheck(mdn);
 
 		if (oldSub == null) {
 			throw new ResourceNotFoundException(MessageUtil.NOT_FOUND_MSG);
 		} else {
 
 			if (sub.getSuspended() != null) {
-				int count = subRepository.updateSubscriberSuspended(sub.getSuspended(), mdn);
+				int count = entityManager.createNativeQuery(
+						"update whlr_subscribers_info set suspended =:suspended where mdn_id = (select id from whlr_mdn where mdn=:mdn)")
+						.setParameter("mdn", mdn).setParameter("suspended", sub.getSuspended()).executeUpdate();
+
 				if (count == 1)
 					log.debug("Subscriber suspend/unsuspend Updated Succesfully ");
 				else
 					log.debug("Failed to Update the Subscriber");
 			} else {
-				if (sub.getEnterpriseName() != null && sub.getEnterpriseName().equals(oldSub.getEnterpriseName()))
+				if (sub.getEnterpriseName() != null && !sub.getEnterpriseName().equals(oldSub.getEnterpriseName()))
 					throw new ValidationErrorException(MessageUtil.ENTERPRISE_NAME_CANNOT_BE_MODIFIED);
 
-				if (sub.getEmail() != null)
-					oldSub.setEmail(null);
-				if (sub.getUfmi() != null)
-					oldSub.setUfmi(oldSub.getUfmi());
-				if (sub.getMdn() != null)
-					oldSub.setMdn(sub.getMdn());
-				if (sub.getUserName() != null)
-					oldSub.setUserName(sub.getUserName());
+				if (oldSub.getSuspended())
+					throw new ValidationErrorException(MessageUtil.CANNOT_UPDATE_SUSPENDED_SUBSCRIBER);
 
-				subRepository.save(oldSub);
+				if (sub.getMdn() != null && !sub.getMdn().equals(oldSub.getMdn())) {
+					mdnDatabaseExistscheck(sub.getMdn());
+
+					entityManager.createNativeQuery("update whlr_mdn set mdn =:mdn1 where mdn =:mdn2")
+							.setParameter("mdn1", sub.getMdn()).setParameter("mdn2", oldSub.getMdn()).executeUpdate();
+				}
+				if (sub.getMin() != null && !sub.getMin().equals(oldSub.getMin()))
+					minDatabaseExistscheck(sub.getMin());
+				else
+					sub.setMin(oldSub.getMin());
+
+				if (sub.getUfmi() != null && !sub.getUfmi().equals(oldSub.getUfmi()))
+					ufmiDatabaseExistscheck(sub.getUfmi());
+				else
+					sub.setUfmi(oldSub.getUfmi());
+
+				if (sub.getCos() != null && !sub.getCos().equals(oldSub.getCos()))
+					cosDatabaseExistscheck(sub.getCos());
+				else
+					sub.setCos(oldSub.getCos());
+
+				if (sub.getIsSecure() != null && !sub.getIsSecure().equals(oldSub.getIsSecure()) && sub.getIsSecure())
+					enterpriseNameDatabaseExistscheck(oldSub.getEnterpriseName(), sub.getIsSecure());
+				else
+					sub.setIsSecure(oldSub.getIsSecure());
+
+				if (sub.getEmail() == null)
+					sub.setEmail(oldSub.getEmail());
+
+				if (sub.getUserName() != null && !sub.getUserName().equals(oldSub.getUserName())) {
+					entityManager.createNativeQuery(
+							"update shared_contacts set user_name =:userName where mdn_id = (select id from whlr_mdn where mdn=:mdn)")
+							.setParameter("userName", sub.getUserName()).setParameter("mdn", sub.getMdn())
+							.executeUpdate();
+				}
+
+				entityManager.createNativeQuery(
+						"update whlr_subscribers_info set cos =:cos,email=:email,is_secure=:is_secure,min=:min,ufmi=:ufmi where mdn_id = (select id from whlr_mdn where mdn=:mdn)")
+						.setParameter("cos", sub.getCos()).setParameter("email", sub.getEmail())
+						.setParameter("is_secure", sub.getIsSecure()).setParameter("min", sub.getMin())
+						.setParameter("ufmi", sub.getUfmi()).setParameter("mdn", sub.getMdn()).executeUpdate();
+
 			}
 		}
 
@@ -174,14 +213,38 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 	public Subscriber getSubscriber(Long mdn) {
 
 		log.debug(" GET Subscriber DAO ");
-		return subRepository.findByMdn(mdn);
+		Subscriber subscriber = subscriberExistcheck(mdn);
+
+		if (subscriber.getSuspended())
+			throw new ValidationErrorException(MessageUtil.SUBSCRIBER_SUSPENDED);
+
+		return subscriber;
+
+	}
+
+	private Subscriber subscriberExistcheck(Long mdn) {
+
+		Subscriber sub = subRepository.findByMdn(mdn);
+		if (sub == null)
+			throw new ResourceNotFoundException(MessageUtil.NOT_FOUND_MSG);
+
+		return sub;
 	}
 
 	@Override
 	public void deleteSubscriber(Long mdn) {
 
 		log.debug(" Delete Subscriber DAO ");
-		subRepository.deleteById(mdn);
+		subscriberExistcheck(mdn);
+
+		String[] strArr = { "delete from whlr_subscribers_info where mdn_id=(select id from whlr_mdn where mdn=:mdn)",
+				"delete from shared_contacts where mdn_id=(select id from whlr_mdn where mdn=:mdn)",
+				"delete from whlr_mdn where mdn=:mdn" };
+
+		for (String query : strArr) {
+			entityManager.createNativeQuery(query).setParameter("mdn", mdn).executeUpdate();
+		}
+
 	}
 
 }

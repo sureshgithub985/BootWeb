@@ -1,20 +1,24 @@
 package com.ey.core.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 
 import com.ey.core.entity.Subscriber;
 
 public interface SubscriberRepository
 		extends JpaRepository<Subscriber, Long>, PagingAndSortingRepository<Subscriber, Long> {
 
-	@Modifying
-	@Query("update Subscriber sub set sub.suspended =:suspended where sub.mdn = :mdn")
-	public int updateSubscriberSuspended(@Param("suspended") boolean suspended, @Param("mdn") long mdn);
-
+	/*
+	 * @Modifying
+	 * 
+	 * @NamedNativeQuery(query =
+	 * "update whlr_subscribers_info set suspended =:suspended where mdn_id = (select id from whlr_mdn where mdn=:mdn"
+	 * , name = "updateQuery") //@Query(name =
+	 * "update whlr_subscribers_info set suspended =:suspended where mdn_id = (select id from whlr_mdn where mdn=:mdn)"
+	 * , nativeQuery = true) public int
+	 * updateSubscriberSuspended(@Param("suspended") boolean
+	 * suspended, @Param("mdn") long mdn);
+	 */
 	/*
 	 * @Modifying
 	 * 

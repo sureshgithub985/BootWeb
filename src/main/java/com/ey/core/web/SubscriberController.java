@@ -64,6 +64,7 @@ public class SubscriberController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add("X-Total-Count", String.valueOf(subList.size()));
 
 		return new ResponseEntity<>(subList, headers, HttpStatus.OK);
 
