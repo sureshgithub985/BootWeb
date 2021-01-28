@@ -8,4 +8,6 @@ import com.ey.core.entity.Subscriber;
 public interface SubscriberRepository
 		extends JpaRepository<Subscriber, Long>, PagingAndSortingRepository<Subscriber, Long> {
 
+	public Subscriber findByMdn(Long mdn);
+
 }
