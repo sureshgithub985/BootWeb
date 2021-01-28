@@ -56,20 +56,17 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 
 		Object singleResult = entityManager.createNativeQuery("select id from whlr_mdn where mdn=:mdn")
 				.setParameter("mdn", sub.getMdn()).getSingleResult();
-		int mdn_id = (Integer) singleResult;
+		int mdnId = (Integer) singleResult;
 
 		entityManager.createNativeQuery("insert into shared_contacts(mdn_id, user_name) values (:mdn_id,:user_name)")
-				.setParameter("mdn_id", mdn_id).setParameter("user_name", sub.getUserName()).executeUpdate();
+				.setParameter("mdn_id", mdnId).setParameter("user_name", sub.getUserName()).executeUpdate();
 
-		int executeUpdate = entityManager.createNativeQuery(
+		entityManager.createNativeQuery(
 				"insert into whlr_subscribers_info(mdn_id, cos, email, enterprise_id, is_secure, min, suspended, ufmi) values (:mdn_id,:cos,:email,:enterprise_id,:is_secure,:min,:suspended,:ufmi)")
-				.setParameter("mdn_id", mdn_id).setParameter("cos", sub.getCos()).setParameter("email", sub.getEmail())
+				.setParameter("mdn_id", mdnId).setParameter("cos", sub.getCos()).setParameter("email", sub.getEmail())
 				.setParameter("enterprise_id", enterpriseId).setParameter("is_secure", sub.getIsSecure())
 				.setParameter("min", sub.getMin()).setParameter("suspended", sub.getSuspended())
 				.setParameter("ufmi", sub.getUfmi()).executeUpdate();
-
-		System.out.println("executeUpdate value is " + executeUpdate);
-
 	}
 
 	private int enterpriseNameDatabaseExistscheck(String enterpriseName, Boolean isSecure) {
@@ -77,7 +74,7 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 		Enterprise ent = enterpriseDAO.findByEntName(enterpriseName);
 		if (ent != null) {
 			int ckr = ent.getCkr();
-			if (ckr == 0 && isSecure)
+			if (ckr == 0 && Boolean.TRUE.equals(isSecure))
 				throw new ValidationErrorException(MessageUtil.SECURE_SUB_CANNOT_BE_ADDED_TO_NONSECURE_ENT);
 			return ent.getId();
 		} else {
@@ -122,7 +119,6 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 		Object singleResult = entityManager.createNativeQuery("select count(*) from whlr_mdn where mdn=:mdn")
 				.setParameter("mdn", mdn).getSingleResult();
 		BigInteger mdnId = (BigInteger) singleResult;
-		System.out.println(" mdnId.signum() value is  " + mdnId.signum());
 		if (mdnId.signum() != 0)
 			throw new ValidationErrorException(MessageUtil.MDN_ALREADY_EXISTS);
 	}
@@ -159,7 +155,7 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 				if (sub.getEnterpriseName() != null && !sub.getEnterpriseName().equals(oldSub.getEnterpriseName()))
 					throw new ValidationErrorException(MessageUtil.ENTERPRISE_NAME_CANNOT_BE_MODIFIED);
 
-				if (oldSub.getSuspended())
+				if (Boolean.TRUE.equals(oldSub.getSuspended()))
 					throw new ValidationErrorException(MessageUtil.CANNOT_UPDATE_SUSPENDED_SUBSCRIBER);
 
 				if (sub.getMdn() != null && !sub.getMdn().equals(oldSub.getMdn())) {
@@ -183,7 +179,7 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 				else
 					sub.setCos(oldSub.getCos());
 
-				if (sub.getIsSecure() != null && !sub.getIsSecure().equals(oldSub.getIsSecure()) && sub.getIsSecure())
+				if (!sub.getIsSecure().equals(oldSub.getIsSecure()) && Boolean.TRUE.equals(sub.getIsSecure()))
 					enterpriseNameDatabaseExistscheck(oldSub.getEnterpriseName(), sub.getIsSecure());
 				else
 					sub.setIsSecure(oldSub.getIsSecure());
@@ -215,7 +211,7 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 		log.debug(" GET Subscriber DAO ");
 		Subscriber subscriber = subscriberExistcheck(mdn);
 
-		if (subscriber.getSuspended())
+		if (Boolean.TRUE.equals(subscriber.getSuspended()))
 			throw new ValidationErrorException(MessageUtil.SUBSCRIBER_SUSPENDED);
 
 		return subscriber;
