@@ -1,16 +1,16 @@
 //declartive pipelline
 
 pipeline{
-    agent any
+    //agent any
     //agent { dockerfile true }
-    //agent {
-      //  docker { image 'node:14.15.5-buster' }
-    //}
-   // environment {
-       // dockerHome = tool 'myDocker'
-        //mavenHome = tool 'maven'
-        //PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
-    //}
+    agent {
+        docker { image 'node:14.15.5-buster' }
+    }
+    environment {
+        dockerHome = tool 'myDocker'
+        mavenHome = tool 'maven'
+        PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
+    }
     stages {
         stage('Checkout'){
             steps {
