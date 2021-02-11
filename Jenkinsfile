@@ -19,6 +19,7 @@ pipeline{
                 //sudo usermod -a -G docker jenkins
                 //sh  'docker version'
                 echo "Build"
+				echo "maven home is $mavenHome"
                 ehco "SURESH is  $PATH"
                 //sh 'printenv'
                 //echo "BUILD_NUMBER - $env.BUILD_NUMBER"
