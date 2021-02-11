@@ -14,13 +14,13 @@ pipeline{
     stages {
         stage('Checkout'){
             steps {
-                sh 'mvn -v'
+                //sh 'mvn -v'
                 echo "After maven version"
                 //sudo usermod -a -G docker jenkins
                 //sh  'docker version'
                 echo "Build"
                 //ehco "SURESH is  $PATH"
-                sh 'printenv'
+                //sh 'printenv'
                 echo "BUILD_NUMBER - $env.BUILD_NUMBER"
                 echo "BUILD_ID - $env.BUILD_ID"
                 echo "JOB_NAME - $env.JOB_NAME"
