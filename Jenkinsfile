@@ -14,7 +14,7 @@ pipeline{
     stages {
         stage('Checkout'){
             steps {
-                sh 'mvn --version'
+                //sh 'mvn --version'
                 echo "After maven version"
                 //sudo usermod -a -G docker jenkins
                 //sh  'docker version'
