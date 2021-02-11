@@ -2,24 +2,24 @@
 
 pipeline{
     //agent any
-    //agent { dockerfile true }
-    agent {
-        docker { image 'node:14.15.5-buster' }
-    }
+    agent { dockerfile true }
+    //agent {
+      //  docker { image 'node:14.15.5-buster' }
+    //}
     environment {
-        dockerHome = tool 'myDocker'
-        mavenHome = tool 'maven'
-        PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
+        //dockerHome = tool 'myDocker'
+        mavenHome = "D:/Softwares/apache-maven-3.6.3-bin/apache-maven-3.6.3/bin"
+        PATH = "$mavenHome/bin:$PATH"
     }
     stages {
         stage('Checkout'){
             steps {
-                //sh 'mvn -v'
+                sh 'mvn --version'
                 echo "After maven version"
                 //sudo usermod -a -G docker jenkins
                 //sh  'docker version'
                 echo "Build"
-                //ehco "SURESH is  $PATH"
+                ehco "SURESH is  $PATH"
                 //sh 'printenv'
                 //echo "BUILD_NUMBER - $env.BUILD_NUMBER"
                 //echo "BUILD_ID - $env.BUILD_ID"
