@@ -19,8 +19,8 @@ pipeline{
                 //sudo usermod -a -G docker jenkins
                 //sh  'docker version'
                 echo "Build"
-				echo "maven home is $mavenHome"
-                sh 'printenv'
+				//echo "maven home is $mavenHome"
+                //sh 'printenv'
             }
         }
         stage('Compile'){
