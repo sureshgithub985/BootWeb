@@ -12,7 +12,10 @@ import org.springframework.stereotype.Component;
 
 import com.ey.core.dto.EnterpriseDTO;
 import com.ey.core.dto.GTProfileDTO;
+import com.ey.core.dto.SubscriberDTO;
 import com.ey.core.dto.UProfileDTO;
+import com.ey.core.entity.Subscriber;
+import com.ey.core.entity.Suid;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,12 +25,13 @@ public class XMLConvertor {
 
 	JAXBContext context = null;
 
-	Class<?>[] metaCLASSES = { GTProfileDTO.class, EnterpriseDTO.class, UProfileDTO.class };
+	Class<?>[] metaCLASSES = { GTProfileDTO.class, SubscriberDTO.class };
 
 	public XMLConvertor() {
 		try {
 			context = JAXBContext.newInstance(metaCLASSES);
 		} catch (JAXBException e) {
+			e.printStackTrace();
 			log.debug(e.getMessage());
 		}
 	}

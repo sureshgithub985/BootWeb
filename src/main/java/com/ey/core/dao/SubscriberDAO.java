@@ -10,7 +10,7 @@ public interface SubscriberDAO {
 
 	public void createSub(Subscriber sub);
 
-	public List<Subscriber> getAllSubscribersDAO(Pageable pageable);
+	public List<Subscriber> getAllSubscribersDAO(Pageable pageable, String ent);
 
 	public Subscriber getSubscriber(Long mdn);
 

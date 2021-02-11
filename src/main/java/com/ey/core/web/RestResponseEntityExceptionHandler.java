@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.ey.core.util.ResourceNotFoundException;
 import com.ey.core.util.ValidationErrorException;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
 	public static final String VALIDATION_ERROR_MSG = "<error>\n" + "<error-type>ValidationError</error-type>\n"

@@ -10,7 +10,7 @@ public interface SubscriberService {
 
 	public void addSubscriber(Subscriber sub);
 
-	public List<Subscriber> getAllSubscribers(Pageable pageable);
+	public List<Subscriber> getAllSubscribers(Pageable pageable, String enterprise);
 
 	public Subscriber getSubscriber(Long mdn);
 

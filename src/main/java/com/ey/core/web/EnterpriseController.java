@@ -23,7 +23,6 @@ import com.ey.core.entity.Enterprise;
 import com.ey.core.service.EnterpriseService;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/wave-prov/wave")
@@ -71,7 +70,7 @@ public class EnterpriseController {
 		return new ResponseEntity<>(headers, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Create a new donor", response = ResponseEntity.class)
+
 	@GetMapping("/enterprises")
 	public ResponseEntity<List<Enterprise>> getAllEnterprises() {
 

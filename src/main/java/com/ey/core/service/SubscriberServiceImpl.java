@@ -26,10 +26,10 @@ public class SubscriberServiceImpl implements SubscriberService {
 	}
 
 	@Override
-	public List<Subscriber> getAllSubscribers(Pageable pageable) {
-		
+	public List<Subscriber> getAllSubscribers(Pageable pageable, String ent) {
+
 		log.debug("Update Subscriber Service ");
-		return subDao.getAllSubscribersDAO(pageable);
+		return subDao.getAllSubscribersDAO(pageable, ent);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.ey.core.web;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.ey.core.dto.SubscriberDTO;
 import com.ey.core.entity.Subscriber;
 import com.ey.core.service.SubscriberService;
+import com.ey.core.util.MessageUtil;
+import com.ey.core.util.ValidationErrorException;
+import com.ey.core.util.XMLConvertor;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,14 +38,26 @@ public class SubscriberController {
 	@Autowired
 	private SubscriberService subServie;
 
+	@Autowired
+	private XMLConvertor xc;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
 	@PostMapping
 	public ResponseEntity<Void> createSubscriber(@RequestBody Subscriber sub, UriComponentsBuilder uriBuilder) {
 		log.debug("Create Subscriber Controller ");
+
+		System.out.println("Subscriber value is " + sub);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		if (sub != null) {
+
+			// if (sub.getSuids().size() > 5)
+			// throw new ValidationErrorException(MessageUtil.LIMIT_EXCEDED);
+
 			subServie.addSubscriber(sub);
 
 			headers.setLocation(
@@ -54,13 +71,14 @@ public class SubscriberController {
 
 	@GetMapping
 	public ResponseEntity<List<Subscriber>> getAllSubscribers(
-			@RequestParam(value = "pageNum", defaultValue = "0") int pageNum,
-			@RequestParam(value = "pageSize", defaultValue = "100") int pageSize) {
+			@RequestParam(value = "pageNum", defaultValue = "0", required = false) int pageNum,
+			@RequestParam(value = "pageSize", defaultValue = "100", required = false) int pageSize,
+			@RequestParam(value = "enterprise_eq", defaultValue = "", required = false) String enterprise) {
 
 		log.debug(" GETALL Subscribers Controller ");
 
 		Pageable pageable = PageRequest.of(pageNum, pageSize);
-		List<Subscriber> subList = subServie.getAllSubscribers(pageable);
+		List<Subscriber> subList = subServie.getAllSubscribers(pageable, enterprise);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -71,15 +89,24 @@ public class SubscriberController {
 	}
 
 	@GetMapping("/{mdn}")
-	public ResponseEntity<Subscriber> findBySubscriber(@PathVariable("mdn") Long mdn) {
+	public ResponseEntity<Object> findBySubscriber(@PathVariable("mdn") Long mdn) {
 
 		log.debug(" GET Subscriber Controller ");
 		Subscriber sub = subServie.getSubscriber(mdn);
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		return new ResponseEntity<>(sub, headers, HttpStatus.OK);
+		SubscriberDTO sub1 = modelMapper.map(sub, SubscriberDTO.class);
+
+		System.out.println("sub1 value is " + sub1);
+		
+		String inXml = xc.toXml(sub1);
+
+		
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_XML);
+
+		return new ResponseEntity<>(inXml, headers, HttpStatus.OK);
 
 	}
 

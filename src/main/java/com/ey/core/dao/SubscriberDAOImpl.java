@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ey.core.entity.Enterprise;
 import com.ey.core.entity.Subscriber;
+import com.ey.core.entity.Suid;
 import com.ey.core.util.MessageUtil;
 import com.ey.core.util.ResourceNotFoundException;
 import com.ey.core.util.ValidationErrorException;
@@ -67,6 +68,26 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 				.setParameter("enterprise_id", enterpriseId).setParameter("is_secure", sub.getIsSecure())
 				.setParameter("min", sub.getMin()).setParameter("suspended", sub.getSuspended())
 				.setParameter("ufmi", sub.getUfmi()).executeUpdate();
+
+		//if (sub.getSuids().size() > 1) {
+
+//			sub.getSuids()
+	//				.forEach(suid -> entityManager
+		//					.createNativeQuery("insert into whlr_suid(suid, mdn_id) values (:suid,:mdn_id)")
+			//				.setParameter("mdn_id", mdnId).setParameter("suid", suid).executeUpdate());
+
+			/*
+			 * sub.getSuids().stream(suid -> entityManager.
+			 * createNativeQuery("insert into whlr_suid(suid, mdn_id) values (:suid,:mdn_id)"
+			 * ) .setParameter("mdn_id", mdnId).setParameter("suid", suid).executeUpdate()).
+			 * 
+			 * for (Suid suid : sub.getSuids()) { entityManager.
+			 * createNativeQuery("insert into whlr_suid(suid, mdn_id) values (:suid,:mdn_id)"
+			 * ) .setParameter("mdn_id", mdnId).setParameter("suid", suid).executeUpdate();
+			 */
+		
+	//}
+
 	}
 
 	private int enterpriseNameDatabaseExistscheck(String enterpriseName, Boolean isSecure) {
@@ -124,10 +145,14 @@ public class SubscriberDAOImpl implements SubscriberDAO {
 	}
 
 	@Override
-	public List<Subscriber> getAllSubscribersDAO(Pageable pageable) {
+	public List<Subscriber> getAllSubscribersDAO(Pageable pageable, String ent) {
 
 		log.debug(" GETALL Subscriber DAO ");
-		return subRepository.findAll(pageable).getContent();
+		System.out.println("ent value is " + ent);
+		if (ent != null && !ent.isEmpty())
+			return subRepository.findAllByEnterpriseName(ent, pageable);
+		else
+			return subRepository.findAll(pageable).getContent();
 	}
 
 	@Override
